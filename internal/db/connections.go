@@ -37,7 +37,7 @@ func Connect() {
 
     } else {
         var err error
-        DB, err = gorm.Open(sqlite.Open("nexthings.sqlite"), &gorm.Config{})
+        DB, err = gorm.Open(sqlite.Open("sgg.sqlite"), &gorm.Config{})
 
         if err != nil {
             log.Error("Failed to connect to SQLite database: ", err)

@@ -6,90 +6,89 @@ package env
 */
 
 import (
-	"fmt"
-	"os"
-	"strconv"
+    "fmt"
+    "os"
+    "strconv"
 
-	"github.com/gofiber/fiber/v2/log"
-	"github.com/joho/godotenv"
-
+    "github.com/gofiber/fiber/v2/log"
+    "github.com/joho/godotenv"
 )
 
 const (
-	LOCAL      = "Local"
-	PRODUCTION = "Production"
+    LOCAL      = "Local"
+    PRODUCTION = "Production"
 
-	DEFAULT_PORT = 8080
+    DEFAULT_PORT = 8080
 )
 
 func Load() {
 
-	cwd, stat_err := os.Getwd()
-	if stat_err != nil {
-		log.Errorf("Stat Error: %v", stat_err)
-	}
+    cwd, stat_err := os.Getwd()
+    if stat_err != nil {
+        log.Errorf("Stat Error: %v", stat_err)
+    }
 
-	parentEnvPath := cwd + "/.env"
-	log.Info("Reading env from: ", parentEnvPath)
-	env_err := godotenv.Load(parentEnvPath)
-	if env_err != nil {
-		log.Errorf("Unable to Load Environment Variables from %s: %v", parentEnvPath, env_err)
-	}
+    parentEnvPath := cwd + "/.env"
+    log.Info("Reading env from: ", parentEnvPath)
+    env_err := godotenv.Load(parentEnvPath)
+    if env_err != nil {
+        log.Errorf("Unable to Load Environment Variables from %s: %v", parentEnvPath, env_err)
+    }
 }
 
 func GetHttpListenPort() (int, error) {
-	var NexThingsEnvPort string  = os.Getenv("NEXTHINGS_PORT")
-	Port, convErr := strconv.Atoi(NexThingsEnvPort)
+    var NexThingsEnvPort string = os.Getenv("SGG_PORT")
+    Port, convErr := strconv.Atoi(NexThingsEnvPort)
 
-	if convErr != nil {
-		log.Errorf("Error converting ENV Port to integer: %v", convErr)
-		return DEFAULT_PORT, convErr
-	}
-	return Port, nil
+    if convErr != nil {
+        log.Errorf("Error converting ENV Port to integer: %v", convErr)
+        return DEFAULT_PORT, convErr
+    }
+    return Port, nil
 }
 
 /**
-	Returns whether the app is running in local or production environments
+Returns whether the app is running in local or production environments
 */
 
 func GetWorkingEnvironment() string {
-	env := os.Getenv("NEXTHINGS_ENVIRONMENT")
+    env := os.Getenv("SGG_ENVIRONMENT")
 
-	if env == "Local" {
-		return LOCAL
-	} else if env == "Production" {
-		return PRODUCTION
-	} else {
-		return LOCAL
-	}
+    if env == "Local" {
+        return LOCAL
+    } else if env == "Production" {
+        return PRODUCTION
+    } else {
+        return LOCAL
+    }
 }
 
 func GetDatabaseDSN() (string, error) {
-	dsn := os.Getenv("NEXTHINGS_POSTGRES_DSN")
+    dsn := os.Getenv("SGG_POSTGRES_DSN")
 
-	if dsn == "" {
-		return "", fmt.Errorf("unable to get DSN")
-	}
+    if dsn == "" {
+        return "", fmt.Errorf("unable to get DSN")
+    }
 
-	return dsn, nil
+    return dsn, nil
 }
 
 func GetSenderEmail() (string, error) {
-	email := os.Getenv("NEXTHINGS_EMAIL_FROM")
+    email := os.Getenv("SGG_EMAIL_FROM")
 
-	if email == "" {
-		return "", fmt.Errorf("unable to get Email")
-	}
+    if email == "" {
+        return "", fmt.Errorf("unable to get Email")
+    }
 
-	return email, nil
+    return email, nil
 }
 
 func GetAppPassword() (string, error) {
-	app_password := os.Getenv("NEXTHINGS_EMAIL_APP_PASSWORD")
+    app_password := os.Getenv("SGG_EMAIL_APP_PASSWORD")
 
-	if app_password == "" {
-		return "", fmt.Errorf("unable to get app password")
-	}
+    if app_password == "" {
+        return "", fmt.Errorf("unable to get app password")
+    }
 
-	return app_password, nil
+    return app_password, nil
 }
