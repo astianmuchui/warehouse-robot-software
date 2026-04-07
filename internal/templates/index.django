@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SGG Warehouse Robot — Coming Soon</title>
+
+        <script src="/assets/js/tailwind.js"></script>
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <script src="/assets/js/main.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <meta name="description" content="SGG Warehouse Robot — a semi-autonomous robot for warehouse operations and environmental monitoring.">
+        <meta name="keywords" content="warehouse robot, robotics, environmental monitoring, coming soon">
+        <meta name="author" content="SGG Warehouse Robot">
+        <meta property="og:title" content="SGG Warehouse Robot — Coming Soon">
+        <meta property="og:description" content="A semi-autonomous warehouse robot for monitoring and handling operations.">
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="SGG Warehouse Robot — Coming Soon">
+        <meta name="twitter:description" content="A semi-autonomous warehouse robot for monitoring and handling operations.">
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet">
+    </head>
+
+    <body class="min-h-screen overflow-hidden font-[Outfit,sans-serif] text-slate-100 bg-[#041022]">
+        <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+            <div class="absolute -top-24 -left-24 h-[55vw] w-[55vw] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18)_0%,rgba(14,165,233,0.08)_35%,transparent_70%)] blur-xl animate-[float_18s_ease-in-out_infinite]"></div>
+            <div class="absolute -bottom-28 -right-24 h-[55vw] w-[55vw] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18)_0%,rgba(14,165,233,0.08)_35%,transparent_70%)] blur-xl animate-[float_22s_ease-in-out_infinite_reverse]"></div>
+            <div class="absolute top-1/3 left-1/2 h-[30vw] w-[30vw] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.16)_0%,rgba(59,130,246,0.08)_40%,transparent_72%)] blur-xl animate-[float_14s_ease-in-out_infinite]"></div>
+            <div class="absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(circle_at_center,black_30%,transparent_85%)]"></div>
+        </div>
+
+        <main class="relative z-10 min-h-screen grid place-items-center px-6 py-10">
+            <section class="w-full max-w-3xl rounded-3xl border border-white/10 bg-slate-950/55 backdrop-blur-xl shadow-2xl shadow-black/30 px-8 py-12 md:px-12 md:py-16 text-center">
+
+                <h1 class="mt-6 text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-[0.95]">
+                    SGG Warehouse
+                    <span class="block text-sky-300 drop-shadow-[0_0_24px_rgba(56,189,248,0.25)]">Robot</span>
+                </h1>
+
+                <p class="mx-auto mt-5 max-w-2xl text-base md:text-lg leading-8 text-slate-200/75">
+                    A semi-autonomous warehouse robot for monitoring the environment and supporting light warehouse operations.
+                    Built for practical automation, efficiency, and smarter handling.
+                </p>
+
+                <div class="mt-8 flex flex-wrap justify-center gap-3">
+                    <span class="rounded-full border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-slate-200/85">Warehouse automation</span>
+                    <span class="rounded-full border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-slate-200/85">Environmental monitoring</span>
+                    <span class="rounded-full border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-slate-200/85">Robotics in progress</span>
+                </div>
+            </section>
+        </main>
+    </body>
+</html>
