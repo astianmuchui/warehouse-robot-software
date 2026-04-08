@@ -8,5 +8,7 @@ import (
 func RunMigrations() {
     db.DB.AutoMigrate(
         &models.User{},
+        &models.Device{},
+        &models.Threshold{},
     )
 }
