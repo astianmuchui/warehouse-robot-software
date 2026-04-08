@@ -1,72 +1,72 @@
 package main
 
 import (
-    "fmt"
-    "time"
+	"fmt"
+	"time"
 
-    "github.com/gofiber/fiber/v2"
-    "github.com/gofiber/fiber/v2/log"
-    "github.com/gofiber/fiber/v2/middleware/cors"
-    "github.com/gofiber/fiber/v2/middleware/idempotency"
-    "github.com/gofiber/fiber/v2/middleware/limiter"
-    "github.com/gofiber/fiber/v2/middleware/logger"
-    "github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/template/html/v2"
 
-    "github.com/astianmuchui/mobilerobot/internal/db"
-    "github.com/astianmuchui/mobilerobot/internal/env"
-    "github.com/astianmuchui/mobilerobot/internal/routes"
-    "github.com/astianmuchui/mobilerobot/internal/utils"
-    "github.com/gofiber/template/html/v2"
+	"github.com/astianmuchui/mobilerobot/internal/db"
+	"github.com/astianmuchui/mobilerobot/internal/env"
+	"github.com/astianmuchui/mobilerobot/internal/mqtt"
+	"github.com/astianmuchui/mobilerobot/internal/routes"
+	"github.com/astianmuchui/mobilerobot/internal/scylla"
+	"github.com/astianmuchui/mobilerobot/internal/utils"
 )
 
 func init() {
-    env.Load()
-    db.Connect()
-    utils.RunMigrations()
+	env.Load()
+	db.Connect()
+	utils.RunMigrations()
 }
 
 func main() {
 
-    engine := html.New("./internal/templates", ".django")
 
-    var app *fiber.App = fiber.New(fiber.Config{
-        Prefork:      true,
-        ServerHeader: "SGG",
-        AppName:      "SGG IoT Core",
-        Views:        engine,
-    })
+	if _, err := scylla.Connect(); err != nil {
+		log.Warnf("ScyllaDB unavailable: %v — telemetry storage disabled", err)
+	}
 
-    app.Static("/assets", "./assets")
 
-    app.Use(logger.New())
-    app.Use(recover.New())
-    app.Use(cors.New())
+	go func() {
+		time.Sleep(500 * time.Millisecond)
+		mqtt.Connect()
+	}()
 
-    /* Minimal Rate Limiting */
-    app.Use(limiter.New(limiter.Config{
-        Max:               100,
-        Expiration:        10 * time.Second,
-        LimiterMiddleware: limiter.SlidingWindow{},
-    }))
+	engine := html.New("./internal/templates", ".django")
+	engine.AddFunc("deref", func(p *float64) float64 {
+		if p == nil {
+			return 0
+		}
+		return *p
+	})
 
-    /* Idempotency */
-    app.Use(idempotency.New(idempotency.Config{
-        Lifetime: 5 * time.Minute,
-    }))
+	app := fiber.New(fiber.Config{
+		Prefork:      false,
+		ServerHeader: "SGG",
+		AppName:      "SGG Warehouse Robot",
+		Views:        engine,
+	})
 
-    app.Static("templates", "../internal/templates")
+	app.Static("/assets", "./assets")
 
-    routes.GetRoutes(app)
+	app.Use(logger.New())
+	app.Use(recover.New())
+	app.Use(cors.New())
 
-    var listenPort int
-    var address string
-    listenPort, err := env.GetHttpListenPort()
+	routes.GetRoutes(app)
 
-    if err != nil {
-        log.Error("Could not read HTTP Port from .env, Using default port: %v", env.DEFAULT_PORT)
-    }
+	listenPort, err := env.GetHttpListenPort()
+	if err != nil {
+		log.Errorf("Could not read HTTP port: %v — using default %d", err, env.DEFAULT_PORT)
+		listenPort = env.DEFAULT_PORT
+	}
 
-    address = fmt.Sprintf(":%d", listenPort)
-
-    app.Listen(address)
+	address := fmt.Sprintf(":%d", listenPort)
+	log.Fatal(app.Listen(address))
 }
