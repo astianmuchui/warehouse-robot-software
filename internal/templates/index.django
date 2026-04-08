@@ -8,7 +8,7 @@
         <script src="/assets/js/tailwind.js"></script>
         <link rel="stylesheet" href="/assets/css/style.css">
         <script src="/assets/js/main.js"></script>
-        <script src="https://cdn.tailwindcss.com"></script>
+     
     <script src="/assets/js/tailwind.js"></script>
         <meta name="description" content="SGG Warehouse Robot — a semi-autonomous robot for warehouse operations and environmental monitoring.">
         <meta name="keywords" content="warehouse robot, robotics, environmental monitoring, coming soon">
