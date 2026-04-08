@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SGG — Thresholds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif']}}}}</script>
+</head>
+<body class="min-h-screen font-sans bg-[#041022] text-slate-100">
+
+<div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <div class="absolute -top-24 -left-24 h-[55vw] w-[55vw] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.15)_0%,transparent_70%)] blur-xl"></div>
+    <div class="absolute -bottom-28 -right-24 h-[55vw] w-[55vw] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.12)_0%,transparent_70%)] blur-xl"></div>
+</div>
+
+<aside class="fixed top-0 left-0 h-screen w-56 z-20 flex flex-col border-r border-white/10 bg-slate-950/70 backdrop-blur-xl">
+    <div class="px-6 py-5 border-b border-white/10">
+        <span class="text-lg font-extrabold text-white tracking-tight">SGG</span>
+        <span class="ml-1 text-sky-400 text-sm font-semibold">Robot</span>
+    </div>
+    <nav class="flex-1 px-3 py-4 space-y-1">
+        <a href="/dashboard" class="nav-link">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>Dashboard</a>
+        <a href="/analysis" class="nav-link">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Analysis</a>
+        <a href="/events" class="nav-link">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Events</a>
+        <a href="/thresholds" class="nav-link active">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>Thresholds</a>
+        <a href="/replay" class="nav-link">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Replay</a>
+    </nav>
+    <div class="px-4 py-3 border-t border-white/10">
+        <p class="text-xs text-slate-500">Device: <span class="text-sky-400 font-mono">{{.DeviceID}}</span></p>
+    </div>
+</aside>
+
+<main class="relative z-10 ml-56 min-h-screen">
+    <header class="sticky top-0 z-10 flex items-center justify-between px-8 py-4 border-b border-white/10 bg-slate-950/60 backdrop-blur-md">
+        <h1 class="text-xl font-bold text-white">Alert Thresholds</h1>
+    </header>
+
+    <div class="px-8 py-6 space-y-6">
+
+        
+        <div class="panel">
+            <h2 class="panel-title">Add Threshold</h2>
+            <form id="threshold-form" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
+                <div class="col-span-2 md:col-span-1">
+                    <label class="form-label">Metric</label>
+                    <select name="metric" class="form-input">
+                        <option value="temperature">Temperature (°C)</option>
+                        <option value="humidity">Humidity (%)</option>
+                        <option value="air_quality">Air Quality (ppm)</option>
+                        <option value="distance">Distance (cm)</option>
+                        <option value="accel_x">Accel X (m/s²)</option>
+                        <option value="accel_y">Accel Y (m/s²)</option>
+                        <option value="accel_z">Accel Z (m/s²)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Label</label>
+                    <input type="text" name="label" placeholder="e.g. Over-temperature" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Min value</label>
+                    <input type="number" step="any" name="min_value" placeholder="— (none)" class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">Max value</label>
+                    <input type="number" step="any" name="max_value" placeholder="— (none)" class="form-input">
+                </div>
+                <div class="col-span-2 md:col-span-1 flex items-end">
+                    <button type="submit" class="w-full btn-primary">Add threshold</button>
+                </div>
+            </form>
+            <p id="form-msg" class="mt-2 text-xs hidden"></p>
+        </div>
+
+        
+        <div class="panel">
+            <h2 class="panel-title">Active Thresholds for <span class="text-sky-400 font-mono">{{.DeviceID}}</span></h2>
+            <div id="threshold-list" class="space-y-3">
+                {{range .Thresholds}}
+                <div class="threshold-row" data-id="{{.ID}}">
+                    <div class="flex items-center gap-3 flex-1">
+                        <span class="metric-badge">{{.Metric}}</span>
+                        <span class="text-sm text-white font-medium">{{.Label}}</span>
+                        <span class="text-xs text-slate-400 ml-auto">
+                            {{if .MinValue}}min: <strong class="text-sky-300">{{printf "%.2f" (deref .MinValue)}}</strong>{{end}}
+                            {{if and .MinValue .MaxValue}} · {{end}}
+                            {{if .MaxValue}}max: <strong class="text-orange-300">{{printf "%.2f" (deref .MaxValue)}}</strong>{{end}}
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2 ml-4">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer toggle-enabled" {{if .Enabled}}checked{{end}} data-id="{{.ID}}">
+                            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500"></div>
+                        </label>
+                        <button class="text-xs text-red-400 hover:text-red-300 btn-delete" data-id="{{.ID}}">Delete</button>
+                    </div>
+                </div>
+                {{else}}
+                <p class="text-slate-500 text-sm py-4 text-center">No thresholds configured yet</p>
+                {{end}}
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="/assets/js/thresholds.js"></script>
+<script>window.SGG_DEVICE_ID="{{.DeviceID}}";</script>
+</body>
+</html>

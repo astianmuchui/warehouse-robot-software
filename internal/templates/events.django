@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SGG — Events</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif']}}}}</script>
+</head>
+<body class="min-h-screen font-sans bg-[#041022] text-slate-100">
+
+<div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <div class="absolute -top-24 -left-24 h-[55vw] w-[55vw] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.15)_0%,transparent_70%)] blur-xl"></div>
+    <div class="absolute -bottom-28 -right-24 h-[55vw] w-[55vw] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.12)_0%,transparent_70%)] blur-xl"></div>
+</div>
+
+<aside class="fixed top-0 left-0 h-screen w-56 z-20 flex flex-col border-r border-white/10 bg-slate-950/70 backdrop-blur-xl">
+    <div class="px-6 py-5 border-b border-white/10">
+        <span class="text-lg font-extrabold text-white tracking-tight">SGG</span>
+        <span class="ml-1 text-sky-400 text-sm font-semibold">Robot</span>
+    </div>
+    <nav class="flex-1 px-3 py-4 space-y-1">
+        <a href="/dashboard" class="nav-link">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>Dashboard</a>
+        <a href="/analysis" class="nav-link">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Analysis</a>
+        <a href="/events" class="nav-link active">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Events</a>
+        <a href="/thresholds" class="nav-link">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>Thresholds</a>
+        <a href="/replay" class="nav-link">
+            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Replay</a>
+    </nav>
+    <div class="px-4 py-3 border-t border-white/10">
+        <p class="text-xs text-slate-500">Device: <span class="text-sky-400 font-mono">WRBT202642</span></p>
+    </div>
+</aside>
+
+<main class="relative z-10 ml-56 min-h-screen">
+    <header class="sticky top-0 z-10 flex items-center justify-between px-8 py-4 border-b border-white/10 bg-slate-950/60 backdrop-blur-md">
+        <h1 class="text-xl font-bold text-white">Events <span class="text-slate-500 text-sm font-normal">({{.Total}} total)</span></h1>
+    </header>
+
+    <div class="px-8 py-6">
+        <div class="panel overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-slate-500 border-b border-white/10">
+                        <th class="pb-3 pr-4 font-semibold">Time</th>
+                        <th class="pb-3 pr-4 font-semibold">Type</th>
+                        <th class="pb-3 pr-4 font-semibold">Severity</th>
+                        <th class="pb-3 pr-4 font-semibold">Device</th>
+                        <th class="pb-3 font-semibold">Message</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    {{range .Events}}
+                    <tr class="hover:bg-white/5 transition-colors">
+                        <td class="py-3 pr-4 text-slate-400 font-mono text-xs whitespace-nowrap">{{.CreatedAt.Format "2006-01-02 15:04:05"}}</td>
+                        <td class="py-3 pr-4"><span class="event-badge type-{{.EventType}}">{{.EventType}}</span></td>
+                        <td class="py-3 pr-4"><span class="sev-badge sev-{{.Severity}}">{{.Severity}}</span></td>
+                        <td class="py-3 pr-4 font-mono text-sky-400 text-xs">{{.DeviceID}}</td>
+                        <td class="py-3 text-slate-300 text-xs max-w-md truncate">{{.Message}}</td>
+                    </tr>
+                    {{else}}
+                    <tr><td colspan="5" class="py-10 text-center text-slate-500">No events recorded yet</td></tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {{if gt .TotalPages 1}}
+        <div class="mt-4 flex justify-center gap-1">
+            {{range .Pages}}
+            <a href="/events?page={{.}}"
+               class="px-3 py-1.5 rounded text-xs font-medium transition-colors
+                      {{if eq . $.Page}}bg-sky-600 text-white{{else}}bg-slate-800/60 text-slate-400 hover:bg-slate-700{{end}}">
+                {{.}}
+            </a>
+            {{end}}
+        </div>
+        {{end}}
+    </div>
+</main>
+
+</body>
+</html>
