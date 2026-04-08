@@ -4,9 +4,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=chajigo
-      - POSTGRES_PASSWORD=ChAJ1GO
-      - POSTGRES_DB=chaji_abip
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=sgg
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -19,6 +19,17 @@ services:
       - redis_data:/data
     restart: unless-stopped
 
+  scylladb:
+    image: scylladb/scylla:5.4
+    ports:
+      - "9042:9042"
+      - "9160:9160"
+    command: --smp 1 --memory 1G --overprovisioned 1 --api-address 0.0.0.0
+    volumes:
+      - ./scylla_data:/var/lib/scylla
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   redis_data:
+  scylla_data:
