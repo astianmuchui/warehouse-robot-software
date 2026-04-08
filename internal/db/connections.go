@@ -21,7 +21,7 @@ func init() {
 
 func Connect() {
     if WorkingEnv == env.PRODUCTION {
-        // Use Postgres Connection
+
         dsn, dsnErr := env.GetDatabaseDSN()
 
         if dsnErr != nil {
