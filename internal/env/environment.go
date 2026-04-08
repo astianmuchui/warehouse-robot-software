@@ -92,3 +92,63 @@ func GetAppPassword() (string, error) {
 
     return app_password, nil
 }
+
+// MQTT
+
+func GetMQTTBroker() string {
+    v := os.Getenv("SGG_MQTT_BROKER")
+    if v == "" {
+        return "localhost"
+    }
+    return v
+}
+
+func GetMQTTPort() int {
+    v := os.Getenv("SGG_MQTT_PORT")
+    p, err := strconv.Atoi(v)
+    if err != nil {
+        return 1883
+    }
+    return p
+}
+
+func GetMQTTClientID() string {
+    v := os.Getenv("SGG_MQTT_CLIENT_ID")
+    if v == "" {
+        return "sgg_robot_"
+    }
+    return v
+}
+
+func GetMQTTUsername() string { return os.Getenv("SGG_MQTT_USERNAME") }
+func GetMQTTPassword() string { return os.Getenv("SGG_MQTT_PASSWORD") }
+
+// ScyllaDB
+
+func GetCassandraHost() string {
+    v := os.Getenv("SGG_CASSANDRA_HOST")
+    if v == "" {
+        return "localhost"
+    }
+    return v
+}
+
+func GetCassandraPort() int {
+    v := os.Getenv("SGG_CASSANDRA_PORT")
+    p, err := strconv.Atoi(v)
+    if err != nil {
+        return 9042
+    }
+    return p
+}
+
+func GetCassandraKeyspace() string {
+    v := os.Getenv("SGG_CASSANDRA_KEYSPACE")
+    if v == "" {
+        return "sgg_warehouse"
+    }
+    return v
+}
+
+func GetCassandraUsername() string { return os.Getenv("SGG_CASSANDRA_USERNAME") }
+func GetCassandraPassword() string { return os.Getenv("SGG_CASSANDRA_PASSWORD") }
