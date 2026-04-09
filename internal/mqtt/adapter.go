@@ -55,8 +55,8 @@ func Publish(topic string, payload interface{}) error {
 	return nil
 }
 
-func subscribe(topic string) {
-	token := Client.Subscribe(topic, 1, nil)
+func subscribe(c pahomqtt.Client, topic string) {
+	token := c.Subscribe(topic, 1, nil)
 	token.Wait()
 	if token.Error() != nil {
 		fmt.Fprintf(os.Stderr, "MQTT subscribe error [%s]: %v\n", topic, token.Error())

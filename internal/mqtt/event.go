@@ -12,10 +12,8 @@ const RobotTopicPrefix = "robot/devices/"
 
 var onConnect pahomqtt.OnConnectHandler = func(client pahomqtt.Client) {
 	fmt.Println("MQTT: connected to broker")
-	
-	subscribe("robot/devices/#")
-	
-	subscribe("robot/cmd/response")
+	subscribe(client, "robot/devices/#")
+	subscribe(client, "robot/cmd/response")
 }
 
 var onConnectionLost pahomqtt.ConnectionLostHandler = func(client pahomqtt.Client, err error) {

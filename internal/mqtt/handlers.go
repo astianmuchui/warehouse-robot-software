@@ -167,6 +167,20 @@ func handleReadings(raw string) error {
 		RawJSON:       raw,
 	}
 
+	// Clamp physically non-negative measurements; negative readings are invalid.
+	if rec.AirQualityPPM < 0 {
+		rec.AirQualityPPM = 0
+	}
+	if rec.AirQualityV < 0 {
+		rec.AirQualityV = 0
+	}
+	if rec.HumidityPct < 0 {
+		rec.HumidityPct = 0
+	}
+	if rec.DistanceCm < 0 {
+		rec.DistanceCm = 0
+	}
+
 	if scylla.Session != nil {
 		if err := scylla.LogTelemetry(scylla.Session, rec); err != nil {
 			return fmt.Errorf("handleReadings log: %w", err)
