@@ -254,3 +254,22 @@ func GetEventsCount(session *gocql.Session) (int, error) {
 	}
 	return count, nil
 }
+
+func GetTelemetryCount(session *gocql.Session, deviceID string) (int, error) {
+	var count int
+	var err error
+	if deviceID != "" {
+		err = session.Query(
+			`SELECT COUNT(*) FROM robot_telemetry WHERE partition_key = 0 AND device_id = ? ALLOW FILTERING`,
+			deviceID,
+		).Scan(&count)
+	} else {
+		err = session.Query(
+			`SELECT COUNT(*) FROM robot_telemetry WHERE partition_key = 0`,
+		).Scan(&count)
+	}
+	if err != nil {
+		return 0, fmt.Errorf("GetTelemetryCount: %w", err)
+	}
+	return count, nil
+}

@@ -185,6 +185,21 @@ func TelemetryIMUReplayHandler(c *fiber.Ctx) error {
 }
 
 
+func TelemetryCountHandler(c *fiber.Ctx) error {
+	deviceID := c.Query("device_id", "")
+
+	if scylla.Session == nil {
+		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"error": "ScyllaDB not connected"})
+	}
+
+	count, err := scylla.GetTelemetryCount(scylla.Session, deviceID)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.JSON(fiber.Map{"device_id": deviceID, "count": count})
+}
+
 func TelemetryIngestHandler(c *fiber.Ctx) error {
 	if scylla.Session == nil {
 		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"error": "ScyllaDB not connected"})

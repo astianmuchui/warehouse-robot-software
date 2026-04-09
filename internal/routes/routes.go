@@ -31,6 +31,7 @@ func GetRoutes(app *fiber.App) {
 		
 		v1.Get("/telemetry/latest", pageapi.TelemetryLatestHandler)
 		v1.Get("/telemetry/history", pageapi.TelemetryHistoryHandler)
+		v1.Get("/telemetry/count", pageapi.TelemetryCountHandler)
 		v1.Get("/telemetry/imu/latest", pageapi.TelemetryIMUHandler)
 		v1.Get("/telemetry/imu/replay", pageapi.TelemetryIMUReplayHandler)
 		v1.Post("/telemetry/ingest", pageapi.TelemetryIngestHandler)

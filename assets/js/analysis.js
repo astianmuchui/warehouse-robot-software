@@ -84,7 +84,7 @@
     });
   }
 
-  
+
 
   function avg(arr) { return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : null; }
   function max(arr) { return arr.length ? Math.max(...arr) : null; }
@@ -162,6 +162,19 @@
 
   
 
+  async function loadTotalCount() {
+    try {
+      const res = await fetch(`/api/v1/telemetry/count?device_id=${DEVICE_ID}`);
+      if (!res.ok) return;
+      const json = await res.json();
+      if (json.count != null) {
+        setText('stat-total-readings', json.count.toLocaleString());
+      }
+    } catch (e) {
+      console.warn('count fetch error', e);
+    }
+  }
+
   async function loadData() {
     const hours = document.getElementById('hours-select')?.value || 24;
     const res   = await fetch(`/api/v1/telemetry/history?device_id=${DEVICE_ID}&hours=${hours}`);
@@ -215,6 +228,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     loadData();
+    loadTotalCount();
     document.getElementById('hours-select')?.addEventListener('change', loadData);
     document.getElementById('refresh-btn')?.addEventListener('click',  loadData);
   });
