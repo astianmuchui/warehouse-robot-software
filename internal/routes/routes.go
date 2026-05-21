@@ -5,17 +5,26 @@ import (
 
 	pageapi "github.com/astianmuchui/mobilerobot/internal/handlers/api"
 	"github.com/astianmuchui/mobilerobot/internal/handlers"
+	"github.com/astianmuchui/mobilerobot/internal/middleware"
 )
 
 func GetRoutes(app *fiber.App) {
 
-	
+	// Public
 	app.Get("/", handlers.HomeHandler)
-	app.Get("/dashboard", handlers.DashboardHandler)
-	app.Get("/analysis", handlers.AnalysisHandler)
-	app.Get("/events", handlers.EventsHandler)
-	app.Get("/thresholds", handlers.ThresholdsHandler)
-	app.Get("/replay", handlers.ReplayHandler)
+	app.Get("/login", handlers.LoginPageHandler)
+	app.Post("/login", handlers.LoginPostHandler)
+	app.Post("/logout", handlers.LogoutHandler)
+	app.Get("/logout", handlers.LogoutHandler)
+
+	// Gated console pages
+	console := app.Group("", middleware.RequireSession)
+	console.Get("/dashboard", handlers.DashboardHandler)
+	console.Get("/analysis", handlers.AnalysisHandler)
+	console.Get("/events", handlers.EventsHandler)
+	console.Get("/thresholds", handlers.ThresholdsHandler)
+	console.Get("/replay", handlers.ReplayHandler)
+	console.Get("/visualization", handlers.VisualizationHandler)
 
 	
 	app.Route("/api/v1", func(v1 fiber.Router) {
@@ -44,5 +53,8 @@ func GetRoutes(app *fiber.App) {
 		v1.Post("/thresholds", pageapi.ThresholdsCreateHandler)
 		v1.Patch("/thresholds/:id", pageapi.ThresholdsUpdateHandler)
 		v1.Delete("/thresholds/:id", pageapi.ThresholdsDeleteHandler)
+
+		v1.Post("/cmd/drive", pageapi.CmdDriveHandler)
+		v1.Post("/cmd/arm",   pageapi.CmdArmHandler)
 	})
 }

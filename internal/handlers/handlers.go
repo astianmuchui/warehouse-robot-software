@@ -20,6 +20,7 @@ func ReplayHandler(c *fiber.Ctx) error {
 	deviceID := c.Query("device_id", defaultDeviceID)
 	return c.Render("replay", fiber.Map{
 		"Title":    "Gyro Replay",
+		"Active":   "Replay",
 		"DeviceID": deviceID,
 	})
 }
@@ -45,6 +46,7 @@ func DashboardHandler(c *fiber.Ctx) error {
 
 	return c.Render("dashboard", fiber.Map{
 		"Title":           "Dashboard",
+		"Active":          "Dashboard",
 		"DeviceID":        deviceID,
 		"LatestTelemetry": latestTelemetry,
 		"RecentEvents":    recentEvents,
@@ -55,6 +57,7 @@ func AnalysisHandler(c *fiber.Ctx) error {
 	deviceID := c.Query("device_id", defaultDeviceID)
 	return c.Render("analysis", fiber.Map{
 		"Title":    "Analysis",
+		"Active":   "Analysis",
 		"DeviceID": deviceID,
 	})
 }
@@ -89,12 +92,22 @@ func EventsHandler(c *fiber.Ctx) error {
 
 	return c.Render("events", fiber.Map{
 		"Title":       "Events",
+		"Active":      "Events",
 		"DeviceID":    deviceID,
 		"Events":      events,
 		"Page":        page,
 		"TotalPages":  totalPages,
 		"Pages":       pages,
 		"Total":       total,
+	})
+}
+
+func VisualizationHandler(c *fiber.Ctx) error {
+	deviceID := c.Query("device_id", defaultDeviceID)
+	return c.Render("visualization", fiber.Map{
+		"Title":    "Visualization",
+		"Active":   "Visualization",
+		"DeviceID": deviceID,
 	})
 }
 
@@ -108,6 +121,7 @@ func ThresholdsHandler(c *fiber.Ctx) error {
 
 	return c.Render("thresholds", fiber.Map{
 		"Title":      "Thresholds",
+		"Active":     "Thresholds",
 		"DeviceID":   deviceID,
 		"Thresholds": thresholds,
 	})

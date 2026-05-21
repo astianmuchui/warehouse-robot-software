@@ -1,68 +1,639 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SGG Warehouse Robot — Coming Soon</title>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SGG Warehouse Robot</title>
 
-        <script src="/assets/js/tailwind.js"></script>
-        <link rel="stylesheet" href="/assets/css/style.css">
-        <script src="/assets/js/main.js"></script>
-     
     <script src="/assets/js/tailwind.js"></script>
-        <meta name="description" content="SGG Warehouse Robot — a semi-autonomous robot for warehouse operations and environmental monitoring.">
-        <meta name="keywords" content="warehouse robot, robotics, environmental monitoring, coming soon">
-        <meta name="author" content="SGG Warehouse Robot">
-        <meta property="og:title" content="SGG Warehouse Robot — Coming Soon">
-        <meta property="og:description" content="A semi-autonomous warehouse robot for monitoring and handling operations.">
-        <meta property="og:type" content="website">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="SGG Warehouse Robot — Coming Soon">
-        <meta name="twitter:description" content="A semi-autonomous warehouse robot for monitoring and handling operations.">
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif'],mono:['JetBrains Mono','ui-monospace','monospace']}}}}</script>
+    <link rel="stylesheet" href="/assets/css/style.css">
 
-        <link
-            href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
-            rel="stylesheet">
-    </head>
+    <meta name="description" content="SGG Warehouse Robot — a semi-autonomous robot for warehouse operations and environmental monitoring. Final year project, Control & Instrumentation.">
+    <meta name="keywords" content="warehouse robot, robotics, environmental monitoring, control and instrumentation, final year project">
+    <meta name="author" content="Sebastian Muchui, Gloria Ngei, Glen Okoth">
+    <meta property="og:title" content="SGG Warehouse Robot">
+    <meta property="og:description" content="A semi-autonomous warehouse robot for monitoring and handling operations.">
+    <meta property="og:type" content="website">
 
-    <body class="min-h-screen overflow-hidden font-[Outfit,sans-serif] text-slate-100 bg-[#041022]">
-        <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-            <div class="absolute -top-24 -left-24 h-[55vw] w-[55vw] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18)_0%,rgba(14,165,233,0.08)_35%,transparent_70%)] blur-xl animate-[float_18s_ease-in-out_infinite]"></div>
-            <div class="absolute -bottom-28 -right-24 h-[55vw] w-[55vw] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.18)_0%,rgba(14,165,233,0.08)_35%,transparent_70%)] blur-xl animate-[float_22s_ease-in-out_infinite_reverse]"></div>
-            <div class="absolute top-1/3 left-1/2 h-[30vw] w-[30vw] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.16)_0%,rgba(59,130,246,0.08)_40%,transparent_72%)] blur-xl animate-[float_14s_ease-in-out_infinite]"></div>
-            <div class="absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(circle_at_center,black_30%,transparent_85%)]"></div>
-        </div>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-        <main class="relative z-10 min-h-screen grid place-items-center px-6 py-10">
-            <section class="w-full max-w-3xl rounded-3xl border border-white/10 bg-slate-950/55 backdrop-blur-xl shadow-2xl shadow-black/30 px-8 py-12 md:px-12 md:py-16 text-center">
+    <style>
+        :root { color-scheme: dark; }
+        html, body { background: #04070f; }
+        body { font-family: 'Outfit', sans-serif; }
 
-                <h1 class="mt-6 text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-[0.95]">
-                    SGG Warehouse
-                    <span class="block text-sky-300 drop-shadow-[0_0_24px_rgba(56,189,248,0.25)]">Robot</span>
-                </h1>
+        /* Animated aurora background */
+        .aurora { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .aurora .blob {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.55;
+            mix-blend-mode: screen; will-change: transform;
+        }
+        .aurora .b1 { width: 60vw; height: 60vw; top: -20vw; left: -15vw;
+            background: radial-gradient(circle, rgba(56,189,248,0.45), transparent 70%);
+            animation: drift1 22s ease-in-out infinite; }
+        .aurora .b2 { width: 55vw; height: 55vw; bottom: -18vw; right: -10vw;
+            background: radial-gradient(circle, rgba(168,85,247,0.35), transparent 70%);
+            animation: drift2 26s ease-in-out infinite; }
+        .aurora .b3 { width: 40vw; height: 40vw; top: 30vh; left: 50vw;
+            background: radial-gradient(circle, rgba(34,211,238,0.30), transparent 70%);
+            animation: drift3 18s ease-in-out infinite; }
+        @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(6vw,4vw)} }
+        @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-5vw,-3vw)} }
+        @keyframes drift3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-4vw,3vw) scale(1.08)} }
 
-                <p class="mx-auto mt-5 max-w-2xl text-base md:text-lg leading-8 text-slate-200/75">
-                    A semi-autonomous warehouse robot for monitoring the environment and supporting light warehouse operations.
-                    Built for practical automation, efficiency, and smarter handling.
+        .grid-bg {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.35;
+            background-image:
+                linear-gradient(rgba(148,163,184,0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148,163,184,0.07) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 85%);
+        }
+
+        .noise {
+            position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.05;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>");
+        }
+
+        /* Glass panels */
+        .glass {
+            background: rgba(10, 16, 30, 0.55);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(18px) saturate(140%);
+            -webkit-backdrop-filter: blur(18px) saturate(140%);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 30px 80px -20px rgba(0,0,0,0.6);
+        }
+
+        /* Headline gradient */
+        .title-grad {
+            background: linear-gradient(120deg, #ffffff 0%, #bae6fd 35%, #67e8f9 60%, #a78bfa 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            background-size: 200% 200%; animation: shift 8s ease-in-out infinite;
+        }
+        @keyframes shift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            box-shadow: 0 10px 30px -10px rgba(14,165,233,0.6), 0 0 0 1px rgba(255,255,255,0.06) inset;
+        }
+        .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-ghost {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.10);
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+
+        /* Robot stage */
+        #robot-stage {
+            position: relative; width: 100%; aspect-ratio: 1 / 1;
+            border-radius: 24px; overflow: hidden;
+            background:
+                radial-gradient(60% 60% at 50% 40%, rgba(56,189,248,0.15), transparent 70%),
+                linear-gradient(180deg, rgba(2,6,15,0.7), rgba(2,6,15,0.95));
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        #robot-stage canvas { display: block; width: 100% !important; height: 100% !important; }
+
+        .scan-line {
+            position: absolute; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(56,189,248,0.7), transparent);
+            top: 0; animation: scan 4s linear infinite; pointer-events: none;
+        }
+        @keyframes scan { 0%{top:0%} 100%{top:100%} }
+
+        .corner { position: absolute; width: 22px; height: 22px; border-color: rgba(56,189,248,0.7); }
+        .corner.tl { top: 12px; left: 12px; border-top: 2px solid; border-left: 2px solid; }
+        .corner.tr { top: 12px; right: 12px; border-top: 2px solid; border-right: 2px solid; }
+        .corner.bl { bottom: 12px; left: 12px; border-bottom: 2px solid; border-left: 2px solid; }
+        .corner.br { bottom: 12px; right: 12px; border-bottom: 2px solid; border-right: 2px solid; }
+
+        .hud {
+            position: absolute; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+            letter-spacing: 0.1em; color: rgba(186,230,253,0.85); text-transform: uppercase;
+            pointer-events: none;
+        }
+
+        /* Status pill */
+        .pulse-dot {
+            display:inline-block; width: 8px; height: 8px; border-radius: 50%;
+            background: #4ade80; box-shadow: 0 0 12px #4ade80;
+            animation: pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.55;transform:scale(0.85)} }
+
+        /* Team card */
+        .member {
+            position: relative; overflow: hidden;
+            transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+        .member:hover { transform: translateY(-4px); border-color: rgba(56,189,248,0.4); }
+        .member::before {
+            content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+            background: linear-gradient(135deg, rgba(56,189,248,0.0), rgba(167,139,250,0.0));
+            transition: background 0.3s ease;
+        }
+        .member:hover::before {
+            background: linear-gradient(135deg, rgba(56,189,248,0.10), rgba(167,139,250,0.10));
+        }
+        .initial {
+            width: 56px; height: 56px; border-radius: 16px;
+            display: grid; place-items: center;
+            font-weight: 700; font-size: 22px; letter-spacing: 0.02em;
+            background: linear-gradient(135deg, rgba(56,189,248,0.2), rgba(99,102,241,0.2));
+            border: 1px solid rgba(255,255,255,0.10);
+            color: #e0f2fe;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Tag chips */
+        .chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            border-radius: 999px;
+            padding: 6px 12px; font-size: 12px;
+            color: #cbd5e1; font-family: 'JetBrains Mono', monospace;
+        }
+        .chip-dot { width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
+
+        /* Nav */
+        .nav-link { color: #cbd5e1; transition: color 0.15s; }
+        .nav-link:hover { color: #f0f9ff; }
+
+        /* Section divider */
+        .divider {
+            height: 1px; width: 100%;
+            background: linear-gradient(90deg, transparent, rgba(148,163,184,0.25), transparent);
+        }
+
+        /* Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+            .aurora .blob, .title-grad, .scan-line, .pulse-dot { animation: none !important; }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-slate-100 antialiased">
+
+    <div class="aurora">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+    </div>
+    <div class="grid-bg"></div>
+    <div class="noise"></div>
+
+    <!-- Nav -->
+    <header class="relative z-20">
+        <nav class="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 grid place-items-center shadow-lg shadow-sky-500/30">
+                    <span class="font-mono font-bold text-slate-950 text-sm">SGG</span>
+                </div>
+                <div class="leading-tight">
+                    <div class="text-sm font-semibold tracking-wide">SGG Warehouse Robot</div>
+                    <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-mono">Control &amp; Instrumentation · 2026</div>
+                </div>
+            </a>
+            <div class="hidden md:flex items-center gap-7 text-sm">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#team" class="nav-link">Team</a>
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="/login" class="hidden sm:inline-flex items-center gap-2 text-sm text-slate-300 hover:text-white transition">Sign in</a>
+                <a href="/dashboard" class="btn-primary inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition">
+                    Launch Console
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5-5 5M6 12h12"/></svg>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <main class="relative z-10">
+        <section class="max-w-7xl mx-auto px-6 lg:px-10 pt-10 lg:pt-16 pb-20">
+            <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+                <!-- Copy -->
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <span class="chip"><span class="chip-dot"></span> FINAL YEAR PROJECT</span>
+                        <span class="chip">v0.1 · ALPHA</span>
+                    </div>
+
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[0.95] tracking-tight">
+                        <span class="title-grad">A semi-autonomous</span><br>
+                        <span class="title-grad">warehouse companion.</span>
+                    </h1>
+
+                    <p class="mt-6 max-w-xl text-base md:text-lg text-slate-300/85 leading-relaxed">
+                        SGG is a research robot built for environmental monitoring and light warehouse handling — real-time telemetry,
+                        threshold-aware events, and a tele-operable arm. Designed and built as our Bachelor's final year project in
+                        <span class="text-sky-300 font-medium">Control &amp; Instrumentation</span>.
+                    </p>
+
+                    <div class="mt-8 flex flex-wrap items-center gap-3">
+                        <a href="/dashboard" class="btn-primary inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                            Open Dashboard
+                        </a>
+                        <a href="/visualization" class="btn-ghost inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            3D Visualizer
+                        </a>
+                        <a href="#team" class="btn-ghost inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition">
+                            Meet the team
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- 3D Robot Stage -->
+                <div class="relative">
+                    <div id="robot-stage">
+                        <span class="corner tl"></span>
+                        <span class="corner tr"></span>
+                        <span class="corner bl"></span>
+                        <span class="corner br"></span>
+                        <div class="scan-line"></div>
+
+                        <div class="hud" style="top:14px; left:50%; transform:translateX(-50%);">SGG · UNIT 01</div>
+                        <div class="hud" style="bottom:14px; right:18px;">FRAME <span id="hud-frame">0000</span></div>
+
+                        <div id="robot-canvas-wrap" class="absolute inset-0"></div>
+                    </div>
+
+                    <div class="absolute -bottom-3 left-4 right-4 glass rounded-xl px-4 py-2 flex items-center justify-end text-xs font-mono">
+                        <span class="text-slate-400">Drag to orbit</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- About / what SGG is -->
+        <section id="about" class="max-w-7xl mx-auto px-6 lg:px-10 py-20">
+            <div class="grid lg:grid-cols-3 gap-10">
+                <div class="lg:col-span-1">
+                    <div class="text-[11px] uppercase tracking-[0.3em] text-sky-300 font-mono mb-3">// About</div>
+                    <h2 class="text-3xl md:text-4xl font-bold leading-tight">
+                        <span class="title-grad">What does SGG mean?</span>
+                    </h2>
+                    <p class="mt-5 text-slate-300/80 leading-relaxed">
+                        SGG is the initials of the three of us behind this project —
+                        <span class="text-white font-medium">S</span>ebastian,
+                        <span class="text-white font-medium">G</span>loria and
+                        <span class="text-white font-medium">G</span>len.
+                        Built end-to-end for our final year in Control &amp; Instrumentation — from the robot itself to the
+                        live operations console you're reading this on.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-2 grid sm:grid-cols-2 gap-5">
+                    <div class="glass rounded-2xl p-6">
+                        <div class="w-10 h-10 rounded-lg bg-sky-500/15 border border-sky-400/30 grid place-items-center mb-4">
+                            <svg class="w-5 h-5 text-sky-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div class="font-semibold mb-1">Environmental monitoring</div>
+                        <div class="text-sm text-slate-400 leading-relaxed">Continuously watches temperature, humidity and motion across the floor so conditions stay within safe operating limits.</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6">
+                        <div class="w-10 h-10 rounded-lg bg-indigo-500/15 border border-indigo-400/30 grid place-items-center mb-4">
+                            <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="font-semibold mb-1">Replay &amp; analysis</div>
+                        <div class="text-sm text-slate-400 leading-relaxed">Scrub through historical data, query by time range, and rerun events to understand robot behaviour after the fact.</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6">
+                        <div class="w-10 h-10 rounded-lg bg-fuchsia-500/15 border border-fuchsia-400/30 grid place-items-center mb-4">
+                            <svg class="w-5 h-5 text-fuchsia-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div class="font-semibold mb-1">Threshold-aware events</div>
+                        <div class="text-sm text-slate-400 leading-relaxed">Set environmental and motion thresholds; the robot raises events when limits are crossed — logged and reviewable.</div>
+                    </div>
+                    <div class="glass rounded-2xl p-6">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-400/30 grid place-items-center mb-4">
+                            <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </div>
+                        <div class="font-semibold mb-1">Tele-operable handling</div>
+                        <div class="text-sm text-slate-400 leading-relaxed">Drive the robot and command its arm directly from the console for light pick-and-place work and remote inspection.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Team -->
+        <section id="team" class="max-w-7xl mx-auto px-6 lg:px-10 py-20">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+                <div>
+                    <div class="text-[11px] uppercase tracking-[0.3em] text-sky-300 font-mono mb-3">// The Team</div>
+                    <h2 class="text-3xl md:text-4xl font-bold leading-tight">
+                        <span class="title-grad">Three engineers. One robot.</span>
+                    </h2>
+                </div>
+                <p class="max-w-md text-slate-400 text-sm leading-relaxed">
+                    Final year, Bachelor of Engineering in Control &amp; Instrumentation. Everything you see was designed and built by us.
                 </p>
+            </div>
 
-                <div class="mt-8 flex flex-wrap justify-center gap-3">
-                    <span class="rounded-full border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-slate-200/85">Warehouse automation</span>
-                    <span class="rounded-full border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-slate-200/85">Environmental monitoring</span>
-                    <span class="rounded-full border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-slate-200/85">Robotics in progress</span>
-                </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Sebastian -->
+                <article class="member glass rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="initial">SM</div>
+                        <div>
+                            <div class="font-semibold text-lg">Sebastian Muchui</div>
+                        </div>
+                    </div>
+                    <a href="https://github.com/astianmuchui" target="_blank" rel="noopener" class="mt-6 inline-flex items-center gap-2 text-sm text-sky-300 hover:text-sky-200 transition">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.1c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.04 11.04 0 015.8 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                        @astianmuchui
+                    </a>
+                </article>
 
-                <div class="mt-10 flex flex-wrap justify-center gap-4">
-                    <a href="/dashboard" class="inline-flex items-center gap-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-semibold px-7 py-3 text-base shadow-lg shadow-sky-500/25 transition-all duration-150 active:scale-95">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                        Go to Dashboard
+                <!-- Gloria -->
+                <article class="member glass rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="initial">GN</div>
+                        <div>
+                            <div class="font-semibold text-lg">Gloria Ngei</div>
+                        </div>
+                    </div>
+                    <a href="https://github.com/gngei" target="_blank" rel="noopener" class="mt-6 inline-flex items-center gap-2 text-sm text-sky-300 hover:text-sky-200 transition">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.1c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.04 11.04 0 015.8 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                        @gngei
                     </a>
-                    <a href="/replay" class="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-slate-900/60 hover:bg-slate-800/80 text-slate-200 font-semibold px-7 py-3 text-base transition-all duration-150 active:scale-95">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Gyro Replay
+                </article>
+
+                <!-- Glen -->
+                <article class="member glass rounded-2xl p-6">
+                    <div class="flex items-center gap-4">
+                        <div class="initial">GO</div>
+                        <div>
+                            <div class="font-semibold text-lg">Glen Okoth</div>
+                        </div>
+                    </div>
+                    <a href="https://github.com/glenochieng" target="_blank" rel="noopener" class="mt-6 inline-flex items-center gap-2 text-sm text-sky-300 hover:text-sky-200 transition">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.1c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18a11.04 11.04 0 015.8 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.51 11.51 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                        @glenochieng
                     </a>
+                </article>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="relative z-10 border-t border-white/5 mt-10">
+            <div class="max-w-7xl mx-auto px-6 lg:px-10 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-indigo-500 grid place-items-center">
+                        <span class="font-mono font-bold text-slate-950 text-xs">SGG</span>
+                    </div>
+                    <div class="text-sm text-slate-400">
+                        © 2026 Muchui · Ngei · Okoth — Final year, Control &amp; Instrumentation.
+                    </div>
                 </div>
-            </section>
-        </main>
-    </body>
+                <div class="flex items-center gap-5 text-sm text-slate-400">
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/analysis" class="nav-link">Analysis</a>
+                    <a href="/replay" class="nav-link">Replay</a>
+                    <a href="/visualization" class="nav-link">3D</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Three.js -->
+    <script src="/assets/js/three.js"></script>
+    <script>
+    (function () {
+        if (typeof THREE === 'undefined') return;
+
+        const wrap = document.getElementById('robot-canvas-wrap');
+        if (!wrap) return;
+
+        const scene    = new THREE.Scene();
+        scene.background = null;
+
+        const camera   = new THREE.PerspectiveCamera(38, 1, 0.1, 200);
+        camera.position.set(7.5, 5.5, 9);
+        camera.lookAt(0, 1.2, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.outputEncoding = THREE.sRGBEncoding || undefined;
+        renderer.shadowMap.enabled = true;
+        wrap.appendChild(renderer.domElement);
+
+        // Lights
+        const hemi = new THREE.HemisphereLight(0x9ec5ff, 0x0a0f1c, 0.55);
+        scene.add(hemi);
+        const key = new THREE.DirectionalLight(0x9ddcff, 1.2);
+        key.position.set(6, 9, 5); key.castShadow = true;
+        key.shadow.mapSize.set(1024, 1024);
+        scene.add(key);
+        const rim = new THREE.DirectionalLight(0xa78bfa, 0.7);
+        rim.position.set(-6, 4, -5);
+        scene.add(rim);
+        const fill = new THREE.PointLight(0x38bdf8, 0.8, 20);
+        fill.position.set(0, 3, 4);
+        scene.add(fill);
+
+        // Ground disc
+        const ground = new THREE.Mesh(
+            new THREE.CircleGeometry(7, 64),
+            new THREE.MeshStandardMaterial({ color: 0x0a1020, roughness: 0.9, metalness: 0.05 })
+        );
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -0.01;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Grid lines
+        const grid = new THREE.GridHelper(14, 28, 0x1e3a5f, 0x132238);
+        grid.position.y = 0;
+        scene.add(grid);
+
+        // Materials
+        const matBody = new THREE.MeshStandardMaterial({ color: 0x1c2a44, roughness: 0.45, metalness: 0.55 });
+        const matAccent = new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0a3a5f, emissiveIntensity: 0.6, roughness: 0.3, metalness: 0.6 });
+        const matDark = new THREE.MeshStandardMaterial({ color: 0x0b1422, roughness: 0.6, metalness: 0.3 });
+        const matRubber = new THREE.MeshStandardMaterial({ color: 0x0a0a0c, roughness: 0.95, metalness: 0.0 });
+        const matMetal = new THREE.MeshStandardMaterial({ color: 0xb8bcc4, roughness: 0.35, metalness: 0.9 });
+        const matLED = new THREE.MeshStandardMaterial({ color: 0x4ade80, emissive: 0x4ade80, emissiveIntensity: 2.2 });
+        const matSensor = new THREE.MeshStandardMaterial({ color: 0x2b6cb0, roughness: 0.4, metalness: 0.4 });
+
+        const robot = new THREE.Group();
+        scene.add(robot);
+
+        // Chassis (lower deck)
+        const chassis = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.5, 2.2), matBody);
+        chassis.position.y = 0.65;
+        chassis.castShadow = true;
+        robot.add(chassis);
+
+        // Bevel band (accent strip)
+        const band = new THREE.Mesh(new THREE.BoxGeometry(3.42, 0.08, 2.22), matAccent);
+        band.position.y = 0.85;
+        robot.add(band);
+
+        // Upper deck
+        const upper = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.4, 1.8), matDark);
+        upper.position.y = 1.15;
+        upper.castShadow = true;
+        robot.add(upper);
+
+        // Wheels (4) — diff drive style with castors implied
+        function wheel(x, z) {
+            const g = new THREE.Group();
+            const tire = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.55, 0.55, 0.32, 28),
+                matRubber
+            );
+            tire.rotation.z = Math.PI / 2;
+            tire.castShadow = true;
+            const hub = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.22, 0.22, 0.34, 16),
+                matMetal
+            );
+            hub.rotation.z = Math.PI / 2;
+            g.add(tire); g.add(hub);
+            g.position.set(x, 0.55, z);
+            return g;
+        }
+        const w1 = wheel( 1.2,  1.05); robot.add(w1);
+        const w2 = wheel(-1.2,  1.05); robot.add(w2);
+        const w3 = wheel( 1.2, -1.05); robot.add(w3);
+        const w4 = wheel(-1.2, -1.05); robot.add(w4);
+        const wheels = [w1, w2, w3, w4];
+
+        // Single HC-SR04 ultrasonic sensor (front-center) — two "eyes" on one PCB
+        const usMount = new THREE.Group();
+        usMount.position.set(0, 1.0, 1.12);
+        const usPcb = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.45, 0.12), new THREE.MeshStandardMaterial({ color: 0x0a3a25, roughness: 0.5 }));
+        usMount.add(usPcb);
+        const eyeGeom = new THREE.CylinderGeometry(0.18, 0.18, 0.16, 24);
+        const eyeMat = new THREE.MeshStandardMaterial({ color: 0x9ca3af, metalness: 0.85, roughness: 0.25 });
+        const eL = new THREE.Mesh(eyeGeom, eyeMat); eL.rotation.x = Math.PI / 2; eL.position.set(-0.28, 0, 0.08); usMount.add(eL);
+        const eR = new THREE.Mesh(eyeGeom, eyeMat); eR.rotation.x = Math.PI / 2; eR.position.set( 0.28, 0, 0.08); usMount.add(eR);
+        robot.add(usMount);
+
+        // Sensor mast (camera/IMU tower)
+        const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.0, 12), matMetal);
+        mast.position.set(-0.9, 1.85, 0); mast.castShadow = true;
+        robot.add(mast);
+        const head = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.4, 0.55), matDark);
+        head.position.set(-0.9, 2.4, 0); head.castShadow = true;
+        robot.add(head);
+        const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.1, 18), matAccent);
+        lens.rotation.x = Math.PI / 2; lens.position.set(-0.9, 2.4, 0.3);
+        robot.add(lens);
+
+        // LEDs
+        const led1 = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 12), matLED);
+        led1.position.set(1.5, 0.95, 1.1); robot.add(led1);
+        const led2 = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 12), matLED);
+        led2.position.set(-1.5, 0.95, 1.1); robot.add(led2);
+
+        // Articulated arm (3 links + gripper)
+        const armBase = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.32, 0.25, 24), matAccent);
+        armBase.position.set(0.7, 1.42, 0); robot.add(armBase);
+
+        const arm = new THREE.Group();
+        arm.position.set(0.7, 1.55, 0);
+        robot.add(arm);
+
+        const link1 = new THREE.Mesh(new THREE.BoxGeometry(0.22, 1.0, 0.22), matMetal);
+        link1.position.y = 0.5; arm.add(link1);
+
+        const joint = new THREE.Group(); joint.position.y = 1.0; arm.add(joint);
+        const link2 = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.9, 0.20), matMetal);
+        link2.position.y = 0.45; joint.add(link2);
+
+        const wrist = new THREE.Group(); wrist.position.y = 0.9; joint.add(wrist);
+        const grip1 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.28, 0.14), matDark);
+        grip1.position.set( 0.12, 0.14, 0); wrist.add(grip1);
+        const grip2 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.28, 0.14), matDark);
+        grip2.position.set(-0.12, 0.14, 0); wrist.add(grip2);
+
+        // Ultrasonic cone visualisation (subtle)
+        const coneGeom = new THREE.ConeGeometry(0.9, 2.4, 28, 1, true);
+        const coneMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.07, side: THREE.DoubleSide });
+        const cone = new THREE.Mesh(coneGeom, coneMat);
+        cone.rotation.x = Math.PI / 2;
+        cone.position.set(0, 1.0, 2.35);
+        robot.add(cone);
+
+        // Orbit interaction (lightweight, no OrbitControls dep)
+        let isDragging = false, lastX = 0, lastY = 0;
+        let targetRotY = 0.6, targetRotX = 0.0;
+        let curRotY = 0.6, curRotX = 0.0;
+        const stage = document.getElementById('robot-stage');
+        stage.addEventListener('pointerdown', e => { isDragging = true; lastX = e.clientX; lastY = e.clientY; stage.setPointerCapture(e.pointerId); });
+        stage.addEventListener('pointerup',   e => { isDragging = false; });
+        stage.addEventListener('pointercancel', () => { isDragging = false; });
+        stage.addEventListener('pointermove', e => {
+            if (!isDragging) return;
+            const dx = (e.clientX - lastX) / 200;
+            const dy = (e.clientY - lastY) / 200;
+            targetRotY += dx;
+            targetRotX = Math.max(-0.5, Math.min(0.6, targetRotX + dy));
+            lastX = e.clientX; lastY = e.clientY;
+        });
+
+        // Resize
+        function resize() {
+            const rect = wrap.getBoundingClientRect();
+            const w = Math.max(1, rect.width);
+            const h = Math.max(1, rect.height);
+            renderer.setSize(w, h, false);
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+        }
+        const ro = new ResizeObserver(resize); ro.observe(wrap); resize();
+
+        // Animate
+        const frameEl = document.getElementById('hud-frame');
+        let frame = 0;
+        const clock = new THREE.Clock();
+        function tick() {
+            const dt = clock.getDelta();
+            const t  = clock.getElapsedTime();
+
+            // Auto-rotate when idle, plus user-driven
+            if (!isDragging) targetRotY += dt * 0.18;
+            curRotY += (targetRotY - curRotY) * 0.08;
+            curRotX += (targetRotX - curRotX) * 0.08;
+            robot.rotation.y = curRotY;
+            robot.rotation.x = curRotX;
+
+            // Spin wheels
+            wheels.forEach(w => { w.children[0].rotation.x += dt * 2.2; w.children[1].rotation.x += dt * 2.2; });
+
+            // Arm gentle motion
+            arm.rotation.x   = Math.sin(t * 0.6) * 0.25;
+            joint.rotation.x = Math.sin(t * 0.6 + 1.2) * 0.45 - 0.2;
+            wrist.rotation.y = Math.sin(t * 0.8) * 0.4;
+
+            // LED breathing
+            const e = 1.6 + Math.sin(t * 3.0) * 0.6;
+            matLED.emissiveIntensity = e;
+
+            // Ultrasonic cone pulse
+            cone.material.opacity = 0.05 + (Math.sin(t * 2.0) * 0.5 + 0.5) * 0.06;
+
+            renderer.render(scene, camera);
+            frame++;
+            if (frameEl && (frame % 6 === 0)) frameEl.textContent = String(frame).padStart(4, '0');
+            requestAnimationFrame(tick);
+        }
+        tick();
+    })();
+    </script>
+</body>
 </html>

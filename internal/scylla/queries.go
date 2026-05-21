@@ -138,6 +138,38 @@ func GetTelemetryHistory(session *gocql.Session, deviceID string, hours int) ([]
 	return results, nil
 }
 
+func GetTelemetryRange(session *gocql.Session, deviceID string, start, end time.Time) ([]TelemetryRecord, error) {
+	iter := session.Query(`
+		SELECT id, uuid, device_id,
+		       temp_c, humidity_pct, air_quality_ppm, air_quality_v,
+		       accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, imu_temp_c,
+		       distance_cm, lat, lon, alt_m, speed_kmph, satellites,
+		       rssi, uptime_s, raw_json, created_at
+		FROM robot_telemetry
+		WHERE partition_key = 0 AND device_id = ? AND created_at >= ? AND created_at <= ?
+		ORDER BY created_at ASC
+		ALLOW FILTERING`,
+		deviceID, start, end,
+	).Iter()
+
+	var results []TelemetryRecord
+	var r TelemetryRecord
+	for iter.Scan(
+		&r.ID, &r.UUID, &r.DeviceID,
+		&r.TempC, &r.HumidityPct, &r.AirQualityPPM, &r.AirQualityV,
+		&r.AccelX, &r.AccelY, &r.AccelZ, &r.GyroX, &r.GyroY, &r.GyroZ, &r.IMUTempC,
+		&r.DistanceCm, &r.Lat, &r.Lon, &r.AltM, &r.SpeedKmph, &r.Satellites,
+		&r.RSSI, &r.UptimeS, &r.RawJSON, &r.CreatedAt,
+	) {
+		results = append(results, r)
+		r = TelemetryRecord{}
+	}
+	if err := iter.Close(); err != nil {
+		return nil, fmt.Errorf("GetTelemetryRange: %w", err)
+	}
+	return results, nil
+}
+
 func GetLatestTelemetryN(session *gocql.Session, deviceID string, limit int) ([]TelemetryRecord, error) {
 	if limit <= 0 {
 		limit = 50

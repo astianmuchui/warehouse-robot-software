@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>SGG — Visualization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="/assets/js/tailwind.js"></script>
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif']}}}}</script>
+    <style>
+        /* ── Overlay card primitive ── */
+        .vc {
+            position: absolute;
+            background: rgba(10,13,20,0.72);
+            backdrop-filter: blur(16px) saturate(140%);
+            -webkit-backdrop-filter: blur(16px) saturate(140%);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 40px rgba(0,0,0,0.45);
+            font-size: 13px;
+            line-height: 1.5;
+            color: #f1f5fb;
+            font-family: 'Outfit', sans-serif;
+            pointer-events: all;
+        }
+        .vc-title {
+            font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+            text-transform: uppercase; color: #8b94a5; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .vc-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #4ade80; box-shadow: 0 0 10px #4ade80;
+        }
+
+        /* ── Pills (top card) ── */
+        .pills { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; justify-content: flex-end; }
+        .pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 999px; padding: 4px 10px; font-size: 11px; color: #c5cdda;
+            font-variant-numeric: tabular-nums;
+        }
+        .pill-lbl { color: #5e6675; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .pill-val { color: #f1f5fb; font-weight: 500; }
+
+        /* ── Slider rows ── */
+        .slider-row {
+            display: grid; grid-template-columns: 64px 1fr 44px;
+            align-items: center; gap: 10px; margin-bottom: 6px;
+        }
+        .slider-row label { font-size: 12px; color: #c5cdda; }
+        .slider-row input[type=range] {
+            width: 100%; height: 4px; -webkit-appearance: none; appearance: none;
+            background: rgba(255,255,255,0.08); border-radius: 2px; outline: none;
+        }
+        .slider-row input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+            background: #6ea8ff; cursor: pointer;
+            box-shadow: 0 0 0 4px rgba(110,168,255,0.18); transition: transform 0.1s;
+        }
+        .slider-row input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+        .slider-row input[type=range]::-moz-range-thumb {
+            width: 14px; height: 14px; border-radius: 50%; background: #6ea8ff;
+            cursor: pointer; border: none; box-shadow: 0 0 0 4px rgba(110,168,255,0.18);
+        }
+        .slider-row .sv { font-size: 11px; color: #8b94a5; text-align: right; font-variant-numeric: tabular-nums; }
+
+        /* ── Button grid ── */
+        .btns { display: grid; gap: 6px; margin-top: 10px; }
+        .btns.g2 { grid-template-columns: 1fr 1fr; }
+        .btns.g4 { grid-template-columns: repeat(4, 1fr); }
+        .btns button {
+            padding: 6px 8px; font-size: 11px; cursor: pointer;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 7px; color: #c5cdda; font-family: 'Outfit', sans-serif;
+            transition: all 0.15s;
+        }
+        .btns button:hover { background: rgba(255,255,255,0.08); color: #f1f5fb; }
+        .btns button.active { background: rgba(110,168,255,0.18); border-color: rgba(110,168,255,0.4); color: #f1f5fb; }
+
+        /* ── Sensor readouts (bottom card) ── */
+        .sensors { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 14px; }
+        .sensor {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px;
+        }
+        .sensor-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #5e6675; }
+        .sensor-val { font-size: 22px; font-weight: 600; color: #f1f5fb; font-variant-numeric: tabular-nums; line-height: 1.1; }
+        .sensor-unit { font-size: 11px; color: #8b94a5; margin-left: 4px; font-weight: 400; }
+        .sensor-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+        .sensor-bar-fill { height: 100%; background: linear-gradient(90deg, #6ea8ff, #4ade80); border-radius: 2px; transition: width 0.3s; }
+        .ir-row { display: flex; gap: 8px; align-items: baseline; }
+        .ir-led { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #333; transition: all 0.2s; }
+        .ir-led.active { background: #f87171; box-shadow: 0 0 12px #f87171; }
+
+        /* ── Card positions (relative to main content area) ── */
+        #vc-top    { top: 16px; left: 50%; transform: translateX(-50%); width: min(560px, 90%); }
+        #vc-right  { right: 16px; top: 50%; transform: translateY(-50%); width: 280px; }
+        #vc-bottom { bottom: 16px; left: 50%; transform: translateX(-50%); width: min(620px, 90%); }
+        #vc-left   { left: 16px; top: 50%; transform: translateY(-50%); width: 260px; }
+
+        /* ── Legend ── */
+        #viz-legend {
+            position: absolute; bottom: 16px; right: 16px;
+            font-size: 11px; color: #5e6675; pointer-events: none;
+        }
+        #viz-legend kbd {
+            display: inline-block; padding: 2px 6px;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 4px; font-family: ui-monospace, monospace; color: #c5cdda; font-size: 10px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 780px) {
+            #vc-left, #vc-right {
+                top: auto; bottom: 16px; transform: none; width: calc(50% - 24px);
+            }
+            #vc-left  { left: 8px; }
+            #vc-right { right: 8px; }
+            #vc-bottom, #viz-legend { display: none; }
+        }
+    </style>
+</head>
+<body class="min-h-screen font-sans bg-[#0b0d12] text-slate-100">
+
+<!-- Sidebar -->
+{{template "sidebar" .}}
+
+<!-- Main viewport -->
+<main class="relative sgg-content h-screen overflow-hidden">
+
+    <!-- Three.js canvas fills the entire main area -->
+    <canvas id="scene" class="block w-full h-full" style="cursor:grab"></canvas>
+
+    <!-- TOP: device identity + telemetry pills -->
+    <div class="vc" id="vc-top">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <div style="font-weight:600;font-size:14px;">
+                {{.DeviceID}}
+                <span style="font-size:11px;color:#8b94a5;margin-left:8px;font-weight:400;">Warehouse Robot</span>
+            </div>
+            <div class="pills">
+                <span class="pill"><span class="vc-dot"></span><span class="pill-val" id="t_mqtt">MQTT</span></span>
+                <span class="pill"><span class="pill-lbl">RSSI</span><span class="pill-val" id="t_rssi">—</span></span>
+                <span class="pill"><span class="pill-lbl">Up</span><span class="pill-val" id="t_uptime">—</span></span>
+                <span class="pill"><span class="pill-lbl">FW</span><span class="pill-val">1.0.0</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEFT: drive controls -->
+    <div class="vc" id="vc-left">
+        <div class="vc-title">Drive <div class="vc-dot"></div></div>
+        <div class="slider-row"><label>Left</label>  <input id="s_motL" type="range" min="-100" max="100" value="0"/> <span class="sv" id="v_motL">0%</span></div>
+        <div class="slider-row"><label>Right</label> <input id="s_motR" type="range" min="-100" max="100" value="0"/> <span class="sv" id="v_motR">0%</span></div>
+        <div class="btns g2">
+            <button id="t_drive" class="active">Wheels</button>
+            <button id="t_stop">Stop</button>
+        </div>
+        <div class="btns g4" style="margin-top:8px;">
+            <button data-view="iso" class="active">Iso</button>
+            <button data-view="front">Front</button>
+            <button data-view="top">Top</button>
+            <button data-view="side">Side</button>
+        </div>
+    </div>
+
+    <!-- RIGHT: arm servo controls -->
+    <div class="vc" id="vc-right">
+        <div class="vc-title">Arm — EEZYbotARM MK1 <div class="vc-dot"></div></div>
+        <div class="slider-row"><label>Base</label>     <input id="s_base"     type="range" min="-90" max="90" value="0"/>  <span class="sv" id="v_base">0°</span></div>
+        <div class="slider-row"><label>Shoulder</label> <input id="s_shoulder" type="range" min="0"   max="90" value="40"/> <span class="sv" id="v_shoulder">40°</span></div>
+        <div class="slider-row"><label>Elbow</label>    <input id="s_elbow"    type="range" min="-30" max="60" value="10"/> <span class="sv" id="v_elbow">10°</span></div>
+        <div class="slider-row"><label>Gripper</label>  <input id="s_grip"     type="range" min="0"   max="40" value="15"/> <span class="sv" id="v_grip">15°</span></div>
+        <div class="btns g2">
+            <button id="t_home">Home</button>
+            <button id="t_animate">Demo</button>
+        </div>
+    </div>
+
+    <!-- BOTTOM: sensor readouts -->
+    <div class="vc" id="vc-bottom">
+        <div class="vc-title">Front Sensors <div class="vc-dot"></div></div>
+        <div class="sensors">
+            <div class="sensor">
+                <span class="sensor-lbl">Ultrasonic · HC-SR04</span>
+                <span class="sensor-val"><span id="v_dist">—</span><span class="sensor-unit">cm</span></span>
+                <div class="sensor-bar"><div class="sensor-bar-fill" id="bar_dist" style="width:21%"></div></div>
+            </div>
+            <div class="sensor">
+                <span class="sensor-lbl">IR · Front-Left</span>
+                <div class="ir-row">
+                    <span class="sensor-val" id="v_irL">CLEAR</span>
+                    <span class="ir-led" id="led_irL"></span>
+                </div>
+                <span class="sensor-lbl" style="margin-top:2px;">TCRT5000 · GPIO 35</span>
+            </div>
+            <div class="sensor">
+                <span class="sensor-lbl">IR · Front-Right</span>
+                <div class="ir-row">
+                    <span class="sensor-val" id="v_irR">CLEAR</span>
+                    <span class="ir-led" id="led_irR"></span>
+                </div>
+                <span class="sensor-lbl" style="margin-top:2px;">TCRT5000 · GPIO 36</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="viz-legend">
+        <kbd>drag</kbd> orbit &nbsp;·&nbsp; <kbd>scroll</kbd> zoom &nbsp;·&nbsp; <kbd>right-drag</kbd> pan
+        &nbsp;·&nbsp; <kbd>W A S D</kbd> drive &nbsp;·&nbsp; <kbd>Space</kbd> stop
+    </div>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="/assets/js/visualization.js"></script>
+<script>window.SGG_DEVICE_ID = "{{.DeviceID}}";</script>
+</body>
+</html>

@@ -2,11 +2,33 @@ package api
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 
 	"github.com/astianmuchui/mobilerobot/internal/scylla"
 )
+
+// parseRangeTime accepts ISO8601 (e.g. "2026-05-21T08:00:00Z") or a date-only
+// string ("2026-05-21"). Returns zero time when input is empty/invalid.
+func parseRangeTime(s string, endOfDay bool) time.Time {
+	if s == "" {
+		return time.Time{}
+	}
+	if t, err := time.Parse(time.RFC3339, s); err == nil {
+		return t.UTC()
+	}
+	if t, err := time.Parse("2006-01-02T15:04", s); err == nil {
+		return t.UTC()
+	}
+	if t, err := time.Parse("2006-01-02", s); err == nil {
+		if endOfDay {
+			t = t.Add(24*time.Hour - time.Second)
+		}
+		return t.UTC()
+	}
+	return time.Time{}
+}
 
 
 func TelemetryLatestHandler(c *fiber.Ctx) error {
@@ -30,6 +52,8 @@ func TelemetryLatestHandler(c *fiber.Ctx) error {
 func TelemetryHistoryHandler(c *fiber.Ctx) error {
 	deviceID := c.Query("device_id", "WRBT202642")
 	hours := c.QueryInt("hours", 24)
+	startStr := c.Query("start", "")
+	endStr := c.Query("end", "")
 
 	if scylla.Session == nil {
 		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
@@ -37,7 +61,27 @@ func TelemetryHistoryHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	recs, err := scylla.GetTelemetryHistory(scylla.Session, deviceID, hours)
+	var (
+		recs []scylla.TelemetryRecord
+		err  error
+	)
+
+	start := parseRangeTime(startStr, false)
+	end := parseRangeTime(endStr, true)
+
+	switch {
+	case !start.IsZero() && !end.IsZero():
+		if end.Before(start) {
+			start, end = end, start
+		}
+		recs, err = scylla.GetTelemetryRange(scylla.Session, deviceID, start, end)
+	case !start.IsZero():
+		recs, err = scylla.GetTelemetryRange(scylla.Session, deviceID, start, time.Now().UTC())
+	case !end.IsZero():
+		recs, err = scylla.GetTelemetryRange(scylla.Session, deviceID, time.Time{}, end)
+	default:
+		recs, err = scylla.GetTelemetryHistory(scylla.Session, deviceID, hours)
+	}
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -77,6 +121,8 @@ func TelemetryHistoryHandler(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"device_id": deviceID,
 		"hours":     hours,
+		"start":     startStr,
+		"end":       endStr,
 		"count":     len(points),
 		"data":      points,
 	})
@@ -141,15 +187,46 @@ func TelemetryIMUReplayHandler(c *fiber.Ctx) error {
 	if limit < 1 {
 		limit = 1
 	}
-	if limit > 500 {
-		limit = 500
+	if limit > 5000 {
+		limit = 5000
 	}
+	startStr := c.Query("start", "")
+	endStr := c.Query("end", "")
 
 	if scylla.Session == nil {
 		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"error": "ScyllaDB not connected"})
 	}
 
-	recs, err := scylla.GetLatestTelemetryN(scylla.Session, deviceID, limit)
+	var (
+		recs []scylla.TelemetryRecord
+		err  error
+	)
+
+	start := parseRangeTime(startStr, false)
+	end := parseRangeTime(endStr, true)
+
+	if !start.IsZero() || !end.IsZero() {
+		if start.IsZero() {
+			start = time.Time{}
+		}
+		if end.IsZero() {
+			end = time.Now().UTC()
+		}
+		if !start.IsZero() && !end.IsZero() && end.Before(start) {
+			start, end = end, start
+		}
+		recs, err = scylla.GetTelemetryRange(scylla.Session, deviceID, start, end)
+		if err == nil && len(recs) > limit {
+			step := float64(len(recs)) / float64(limit)
+			thinned := make([]scylla.TelemetryRecord, 0, limit)
+			for i := 0; i < limit; i++ {
+				thinned = append(thinned, recs[int(float64(i)*step)])
+			}
+			recs = thinned
+		}
+	} else {
+		recs, err = scylla.GetLatestTelemetryN(scylla.Session, deviceID, limit)
+	}
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

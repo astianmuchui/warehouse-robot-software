@@ -26,65 +26,57 @@
         </div>
 
 
-        <aside
-            class="fixed top-0 left-0 h-screen w-56 z-20 flex flex-col border-r border-white/10 bg-slate-950/70 backdrop-blur-xl">
-            <div class="px-6 py-5 border-b border-white/10">
-                <span class="text-lg font-extrabold text-white tracking-tight">SGG</span>
-                <span class="ml-1 text-sky-400 text-sm font-semibold">Robot</span>
-            </div>
-            <nav class="flex-1 px-3 py-4 space-y-1">
-                <a href="/dashboard" class="nav-link">
-                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                    </svg>Dashboard</a>
-                <a href="/analysis" class="nav-link">
-                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>Analysis</a>
-                <a href="/events" class="nav-link">
-                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                    </svg>Events</a>
-                <a href="/thresholds" class="nav-link">
-                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                    </svg>Thresholds</a>
-                <a href="/replay" class="nav-link active">
-                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>Replay</a>
-            </nav>
-            <div class="px-4 py-3 border-t border-white/10">
-                <p class="text-xs text-slate-500">Device: <span class="text-sky-400 font-mono">{{.DeviceID}}</span></p>
-            </div>
-        </aside>
+        {{template "sidebar" .}}
 
-        <main class="relative z-10 ml-56 min-h-screen">
+        <main class="relative z-10 sgg-content min-h-screen">
             <header
-                class="sticky top-0 z-10 flex items-center justify-between px-8 py-4 border-b border-white/10 bg-slate-950/60 backdrop-blur-md">
+                class="sticky top-0 z-10 flex items-center justify-between pl-16 pr-4 sm:px-6 lg:px-8 py-4 gap-3 border-b border-white/10 bg-slate-950/60 backdrop-blur-md">
                 <h1 class="text-xl font-bold text-white">Gyro Replay</h1>
                 <span class="text-xs text-slate-400">Replay recorded IMU orientation data</span>
             </header>
 
-            <div class="px-8 py-6 space-y-6">
+            <div class="px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
 
                 <div class="panel flex flex-wrap items-end gap-4">
                     <div class="flex flex-col gap-1">
-                        <label class="text-xs text-slate-400 font-medium">Readings to load</label>
+                        <label class="text-xs text-slate-400 font-medium">Max frames</label>
                         <div class="flex items-center gap-3">
-                            <input type="range" id="limit-slider" min="10" max="200" step="10" value="50"
+                            <input type="range" id="limit-slider" min="10" max="500" step="10" value="50"
                                 class="w-40 accent-sky-400">
-                            <span class="text-sm font-mono text-sky-300 w-8 text-right" id="limit-display">50</span>
+                            <span class="text-sm font-mono text-sky-300 w-10 text-right" id="limit-display">50</span>
                         </div>
                     </div>
+
+                    <div class="hidden md:block w-px h-10 bg-white/10"></div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs text-slate-400 font-medium" for="replay-start">From</label>
+                        <input id="replay-start" type="datetime-local"
+                               class="bg-slate-800 border border-white/10 text-sm text-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-sky-500/50">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs text-slate-400 font-medium" for="replay-end">To</label>
+                        <input id="replay-end" type="datetime-local"
+                               class="bg-slate-800 border border-white/10 text-sm text-slate-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-sky-500/50">
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs text-slate-400 font-medium">Quick</label>
+                        <select id="replay-quick"
+                                class="bg-slate-800 border border-white/10 text-sm text-slate-200 rounded-lg px-2 py-1.5 focus:outline-none">
+                            <option value="">Latest</option>
+                            <option value="0.25">Last 15 min</option>
+                            <option value="1">Last 1 h</option>
+                            <option value="6">Last 6 h</option>
+                            <option value="24">Last 24 h</option>
+                        </select>
+                    </div>
+
+                    <button id="range-clear-btn"
+                        class="px-3 py-2 rounded-lg border border-white/10 hover:border-white/20 text-slate-300 text-xs font-medium transition-colors" title="Clear range">
+                        Clear
+                    </button>
                     <button id="load-btn"
                         class="px-5 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-sm font-semibold transition-colors">
                         Load Frames

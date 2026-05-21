@@ -195,84 +195,78 @@
 
   
 
-  const legendLabels = {
-    color: '#94a3b8',
-    font: { size: 11 },
-    usePointStyle: true,
-    pointStyle: 'circle',
-    padding: 20,
-  };
-
-  const chartDefaults = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: legendLabels,
+  let hcThemed = false;
+  function applyHighchartsTheme() {
+    if (hcThemed || typeof Highcharts === 'undefined') return;
+    hcThemed = true;
+    Highcharts.setOptions({
+      chart: {
+        backgroundColor: 'transparent',
+        style: { fontFamily: 'Outfit, sans-serif' },
+        spacing: [12, 8, 12, 8],
       },
-    },
-    scales: {
-      x: {
-        ticks: { color: '#64748b', maxTicksLimit: 6, font: { size: 10 } },
-        grid:  { color: 'rgba(255,255,255,0.04)' },
+      title: { style: { color: '#e2e8f0' } },
+      credits: { enabled: false },
+      legend: { itemStyle: { color: '#94a3b8' }, itemHoverStyle: { color: '#f1f5f9' } },
+      xAxis: {
+        type: 'datetime',
+        lineColor: 'rgba(255,255,255,0.08)',
+        tickColor: 'rgba(255,255,255,0.08)',
+        gridLineColor: 'rgba(255,255,255,0.04)',
+        labels: { style: { color: '#64748b', fontSize: '10px' } },
       },
-      y: {
-        ticks: { color: '#64748b', font: { size: 10 } },
-        grid:  { color: 'rgba(255,255,255,0.04)' },
+      yAxis: {
+        gridLineColor: 'rgba(255,255,255,0.04)',
+        labels: { style: { color: '#64748b', fontSize: '10px' } },
+        title: { style: { color: '#64748b' } },
       },
-    },
-  };
-
-  function mkLine(label, color, data) {
-    return {
-      label,
-      data,
-      borderColor:     color,
-      backgroundColor: color + '22',
-      borderWidth:     1.5,
-      fill:            true,
-      tension:         0.3,
-      pointRadius:     0,
-    };
+      tooltip: {
+        backgroundColor: 'rgba(10,16,30,0.92)',
+        borderColor: 'rgba(56,189,248,0.4)',
+        borderRadius: 8,
+        style: { color: '#e2e8f0' },
+        shared: true,
+        xDateFormat: '%H:%M:%S',
+      },
+      plotOptions: {
+        area: { marker: { enabled: false }, lineWidth: 1.5, fillOpacity: 0.12 },
+        line: { marker: { enabled: false }, lineWidth: 1.5 },
+      },
+    });
   }
 
+  function rebuildChart(id, series, yTitle) {
+    const el = document.getElementById(id);
+    if (!el || typeof Highcharts === 'undefined') return null;
+    return Highcharts.chart(id, {
+      chart: { type: 'area', zoomType: 'x' },
+      title: { text: null },
+      yAxis: { title: { text: yTitle } },
+      series,
+    });
+  }
+
+  const charts = {};
+
   async function initCharts() {
+    applyHighchartsTheme();
     const res = await fetch(`/api/v1/telemetry/history?device_id=${DEVICE_ID}&hours=1`);
     if (!res.ok) return;
     const json = await res.json();
     const pts  = json.data || [];
 
-    const labels = pts.map(p => new Date(p.t).toLocaleTimeString());
+    const tempData = pts.map(p => [new Date(p.t).getTime(), p.temp_c]);
+    const humData  = pts.map(p => [new Date(p.t).getTime(), p.humidity_pct]);
+    const aqData   = pts.map(p => [new Date(p.t).getTime(), p.air_quality_ppm]);
 
-    const envCanvas = document.getElementById('env-chart');
-    if (envCanvas) {
-      new Chart(envCanvas, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            mkLine('Temp (°C)',    '#38bdf8', pts.map(p => p.temp_c)),
-            mkLine('Humidity (%)', '#a78bfa', pts.map(p => p.humidity_pct)),
-          ],
-        },
-        options: chartDefaults,
-      });
-    }
+    charts.env = rebuildChart('env-chart', [
+      { name: 'Temp (°C)',    color: '#38bdf8', data: tempData },
+      { name: 'Humidity (%)', color: '#a78bfa', data: humData  },
+    ], 'Value');
 
-    const aqCanvas = document.getElementById('aq-chart');
-    if (aqCanvas) {
-      new Chart(aqCanvas, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            mkLine('Air Quality (ppm)', '#34d399', pts.map(p => p.air_quality_ppm)),
-          ],
-        },
-        options: chartDefaults,
-      });
-    }
+    charts.aq = rebuildChart('aq-chart', [
+      { name: 'Air Quality (ppm)', color: '#34d399', data: aqData },
+    ], 'ppm');
   }
 
   

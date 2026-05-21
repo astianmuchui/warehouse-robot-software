@@ -1,0 +1,113 @@
+{{define "sidebar"}}
+<button id="sgg-sidebar-toggle" type="button"
+    class="lg:hidden fixed top-4 left-4 z-40 inline-flex items-center justify-center w-10 h-10 rounded-xl border border-white/10 bg-slate-950/70 backdrop-blur text-slate-200 shadow-lg"
+    aria-label="Open navigation">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+</button>
+
+<div id="sgg-sidebar-backdrop" class="lg:hidden fixed inset-0 z-20 bg-black/50 backdrop-blur-sm hidden"></div>
+
+<aside id="sgg-sidebar"
+    class="fixed top-0 left-0 h-screen w-60 z-30 flex flex-col border-r border-white/10 bg-slate-950/80 backdrop-blur-xl
+           -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-out">
+
+    <a href="/" class="flex items-center gap-3 px-5 py-5 border-b border-white/10 hover:bg-white/[0.03] transition">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 grid place-items-center shadow-lg shadow-sky-500/30">
+            <span class="font-mono font-bold text-slate-950 text-[11px]">SGG</span>
+        </div>
+        <div class="leading-tight">
+            <div class="text-sm font-semibold text-white">SGG Robot</div>
+            <div class="text-[10px] uppercase tracking-[0.18em] text-slate-400 font-mono">Console</div>
+        </div>
+    </a>
+
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <a href="/dashboard" data-sgg-nav="Dashboard"
+           class="sgg-nav-link {{if eq .Active "Dashboard"}}sgg-nav-active{{end}}">
+            <svg class="w-4 h-4 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1V10"/></svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="/analysis" data-sgg-nav="Analysis"
+           class="sgg-nav-link {{if eq .Active "Analysis"}}sgg-nav-active{{end}}">
+            <svg class="w-4 h-4 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18M7 15l4-4 4 4 5-6"/></svg>
+            <span>Analysis</span>
+        </a>
+        <a href="/events" data-sgg-nav="Events"
+           class="sgg-nav-link {{if eq .Active "Events"}}sgg-nav-active{{end}}">
+            <svg class="w-4 h-4 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            <span>Events</span>
+        </a>
+        <a href="/thresholds" data-sgg-nav="Thresholds"
+           class="sgg-nav-link {{if eq .Active "Thresholds"}}sgg-nav-active{{end}}">
+            <svg class="w-4 h-4 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h10M4 12h6M4 18h13M18 4v6m-3-3h6M16 14v6m-3-3h6"/></svg>
+            <span>Thresholds</span>
+        </a>
+        <a href="/replay" data-sgg-nav="Replay"
+           class="sgg-nav-link {{if eq .Active "Replay"}}sgg-nav-active{{end}}">
+            <svg class="w-4 h-4 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Replay</span>
+        </a>
+        <a href="/visualization" data-sgg-nav="Visualization"
+           class="sgg-nav-link {{if eq .Active "Visualization"}}sgg-nav-active{{end}}">
+            <svg class="w-4 h-4 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3l9 5-9 5-9-5 9-5zm0 9l9 5-9 5-9-5 9-5z"/></svg>
+            <span>3D View</span>
+        </a>
+    </nav>
+
+    <div class="px-4 py-3 border-t border-white/10 space-y-2">
+        <div class="text-[11px] text-slate-500 font-mono">
+            Device · <span class="text-sky-400">{{if .DeviceID}}{{.DeviceID}}{{else}}WRBT202642{{end}}</span>
+        </div>
+        <form method="POST" action="/logout" class="flex">
+            <button type="submit"
+                class="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-white/10 hover:border-rose-500/40 hover:bg-rose-500/10 text-xs text-slate-300 hover:text-rose-200 py-2 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Sign out
+            </button>
+        </form>
+    </div>
+</aside>
+
+<style>
+.sgg-nav-link {
+    display: flex; align-items: center;
+    padding: 9px 12px; border-radius: 10px;
+    font-size: 13.5px; color: #cbd5e1;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    border: 1px solid transparent;
+}
+.sgg-nav-link:hover { background: rgba(255,255,255,0.04); color: #f0f9ff; }
+.sgg-nav-link svg { color: #94a3b8; transition: color 0.15s; }
+.sgg-nav-link:hover svg { color: #38bdf8; }
+.sgg-nav-active {
+    background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(99,102,241,0.12));
+    color: #f0f9ff;
+    border-color: rgba(56,189,248,0.25);
+}
+.sgg-nav-active svg { color: #38bdf8; }
+.sgg-content { margin-left: 0; }
+@media (min-width: 1024px) {
+    .sgg-content { margin-left: 15rem; }
+}
+</style>
+
+<script>
+(function () {
+    var btn = document.getElementById('sgg-sidebar-toggle');
+    var aside = document.getElementById('sgg-sidebar');
+    var back = document.getElementById('sgg-sidebar-backdrop');
+    if (!btn || !aside || !back) return;
+    function open()  { aside.classList.remove('-translate-x-full'); back.classList.remove('hidden'); }
+    function close() { aside.classList.add('-translate-x-full');    back.classList.add('hidden'); }
+    btn.addEventListener('click', open);
+    back.addEventListener('click', close);
+    aside.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () {
+        if (window.matchMedia('(max-width: 1023px)').matches) close();
+    }); });
+})();
+</script>
+{{end}}

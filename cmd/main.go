@@ -23,6 +23,7 @@ func init() {
 	env.Load()
 	db.Connect()
 	utils.RunMigrations()
+	utils.SeedTeamUsers()
 }
 
 func main() {

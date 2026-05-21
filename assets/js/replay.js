@@ -157,16 +157,25 @@
 
   
 
-  async function loadFrames() {
+  function buildReplayQuery() {
     const slider = document.getElementById('limit-slider');
     const limit  = slider ? parseInt(slider.value) : 50;
+    const start  = document.getElementById('replay-start')?.value || '';
+    const end    = document.getElementById('replay-end')?.value || '';
+    const params = new URLSearchParams({ device_id: DEVICE_ID, limit: String(limit) });
+    if (start) params.set('start', start);
+    if (end)   params.set('end',   end);
+    return params.toString();
+  }
+
+  async function loadFrames() {
     const status = document.getElementById('load-status');
 
     stopPlay();
     if (status) status.textContent = 'Loading…';
 
     try {
-      const res = await fetch(`/api/v1/telemetry/imu/replay?device_id=${DEVICE_ID}&limit=${limit}`);
+      const res = await fetch(`/api/v1/telemetry/imu/replay?${buildReplayQuery()}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       frames = json.frames || [];
@@ -256,6 +265,36 @@
     const speedSel = document.getElementById('speed-select');
     if (speedSel) speedSel.addEventListener('change', () => {
       if (playing) { stopPlay(); startPlay(); }
+    });
+
+    function fmtLocal(d) {
+      const pad = n => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+    const quick = document.getElementById('replay-quick');
+    if (quick) quick.addEventListener('change', () => {
+      const startEl = document.getElementById('replay-start');
+      const endEl   = document.getElementById('replay-end');
+      const v = parseFloat(quick.value);
+      if (!quick.value || isNaN(v)) {
+        if (startEl) startEl.value = '';
+        if (endEl)   endEl.value   = '';
+        return;
+      }
+      const end = new Date();
+      const start = new Date(end.getTime() - v * 3600 * 1000);
+      if (startEl) startEl.value = fmtLocal(start);
+      if (endEl)   endEl.value   = fmtLocal(end);
+    });
+
+    const clearBtn = document.getElementById('range-clear-btn');
+    if (clearBtn) clearBtn.addEventListener('click', () => {
+      const s = document.getElementById('replay-start');
+      const e = document.getElementById('replay-end');
+      const q = document.getElementById('replay-quick');
+      if (s) s.value = '';
+      if (e) e.value = '';
+      if (q) q.value = '';
     });
   });
 

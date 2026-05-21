@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SGG · Sign in</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="/assets/js/tailwind.js"></script>
+    <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif'],mono:['JetBrains Mono','ui-monospace','monospace']}}}}</script>
+    <style>
+        body { background: #04070f; font-family: 'Outfit', sans-serif; }
+        .aurora { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .aurora .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.55; mix-blend-mode: screen; }
+        .aurora .b1 { width: 60vw; height: 60vw; top: -20vw; left: -15vw; background: radial-gradient(circle, rgba(56,189,248,0.45), transparent 70%); }
+        .aurora .b2 { width: 55vw; height: 55vw; bottom: -18vw; right: -10vw; background: radial-gradient(circle, rgba(168,85,247,0.35), transparent 70%); }
+        .grid-bg { position: fixed; inset: 0; z-index: 0; opacity: 0.35; pointer-events: none;
+            background-image: linear-gradient(rgba(148,163,184,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.07) 1px, transparent 1px);
+            background-size: 64px 64px; mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 85%); }
+        .glass { background: rgba(10, 16, 30, 0.6); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(18px) saturate(140%);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 30px 80px -20px rgba(0,0,0,0.6); }
+        .btn-primary { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); box-shadow: 0 10px 30px -10px rgba(14,165,233,0.6); }
+        .btn-primary:hover { filter: brightness(1.1); }
+        .input {
+            width: 100%;
+            background: rgba(2,6,15,0.65);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: #e2e8f0;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .input:focus { outline: none; border-color: rgba(56,189,248,0.5); box-shadow: 0 0 0 3px rgba(56,189,248,0.12); }
+        .title-grad {
+            background: linear-gradient(120deg, #ffffff 0%, #bae6fd 35%, #67e8f9 60%, #a78bfa 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 antialiased">
+
+<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div></div>
+<div class="grid-bg"></div>
+
+<main class="relative z-10 min-h-screen grid place-items-center px-4 py-10">
+    <div class="w-full max-w-md">
+        <a href="/" class="flex items-center justify-center gap-3 mb-8">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-500 grid place-items-center shadow-lg shadow-sky-500/30">
+                <span class="font-mono font-bold text-slate-950 text-sm">SGG</span>
+            </div>
+            <div class="leading-tight">
+                <div class="text-sm font-semibold tracking-wide">SGG Warehouse Robot</div>
+                <div class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-mono">Operations Console</div>
+            </div>
+        </a>
+
+        <section class="glass rounded-2xl p-7">
+            <div class="text-[11px] uppercase tracking-[0.3em] text-sky-300 font-mono mb-2">// Sign in</div>
+            <h1 class="text-2xl font-bold leading-tight mb-1"><span class="title-grad">Welcome back.</span></h1>
+            <p class="text-sm text-slate-400 mb-6">Authorized team only.</p>
+
+            {{if .Error}}
+            <div class="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+                {{.Error}}
+            </div>
+            {{end}}
+
+            <form method="POST" action="/login" class="space-y-4">
+                {{if .Next}}<input type="hidden" name="next" value="{{.Next}}">{{end}}
+
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-slate-400 mb-1.5" for="identifier">Username or email</label>
+                    <input id="identifier" name="identifier" type="text" autocomplete="username" required class="input" placeholder="astianmuchui">
+                </div>
+
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-slate-400 mb-1.5" for="password">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required class="input" placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="btn-primary w-full inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition">
+                    Sign in
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5-5 5M6 12h12"/></svg>
+                </button>
+            </form>
+
+        </section>
+
+        <p class="text-center text-xs text-slate-500 mt-6">
+            <a href="/" class="hover:text-slate-300 transition">← Back to landing</a>
+        </p>
+    </div>
+</main>
+</body>
+</html>
