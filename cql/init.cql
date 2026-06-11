@@ -40,6 +40,8 @@ CREATE TABLE IF NOT EXISTS robot_telemetry (
     satellites      INT,
 
 
+    color_dominant  TEXT,
+
     rssi            INT,
     uptime_s        BIGINT,
     raw_json        TEXT,

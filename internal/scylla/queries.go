@@ -45,13 +45,13 @@ func LogTelemetry(session *gocql.Session, r TelemetryRecord) error {
 			partition_key, id, uuid, device_id,
 			temp_c, humidity_pct, air_quality_ppm, air_quality_v,
 			accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, imu_temp_c,
-			distance_cm, lat, lon, alt_m, speed_kmph, satellites,
+			distance_cm, color_dominant, lat, lon, alt_m, speed_kmph, satellites,
 			rssi, uptime_s, raw_json, created_at
-		) VALUES (?,?,?,?, ?,?,?,?, ?,?,?,?,?,?,?, ?,?,?,?,?,?, ?,?,?,?)`,
+		) VALUES (?,?,?,?, ?,?,?,?, ?,?,?,?,?,?,?, ?,?,?,?,?,?,?, ?,?,?,?)`,
 		0, id+1, uuid.New().String(), r.DeviceID,
 		r.TempC, r.HumidityPct, r.AirQualityPPM, r.AirQualityV,
 		r.AccelX, r.AccelY, r.AccelZ, r.GyroX, r.GyroY, r.GyroZ, r.IMUTempC,
-		r.DistanceCm, r.Lat, r.Lon, r.AltM, r.SpeedKmph, r.Satellites,
+		r.DistanceCm, r.ColorDominant, r.Lat, r.Lon, r.AltM, r.SpeedKmph, r.Satellites,
 		r.RSSI, r.UptimeS, r.RawJSON, time.Now().UTC(),
 	).Exec()
 }
@@ -80,7 +80,7 @@ func GetLatestTelemetry(session *gocql.Session, deviceID string) (TelemetryRecor
 		SELECT id, uuid, device_id,
 		       temp_c, humidity_pct, air_quality_ppm, air_quality_v,
 		       accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, imu_temp_c,
-		       distance_cm, lat, lon, alt_m, speed_kmph, satellites,
+		       distance_cm, color_dominant, lat, lon, alt_m, speed_kmph, satellites,
 		       rssi, uptime_s, raw_json, created_at
 		FROM robot_telemetry
 		WHERE partition_key = 0 AND device_id = ?
@@ -92,7 +92,7 @@ func GetLatestTelemetry(session *gocql.Session, deviceID string) (TelemetryRecor
 		&r.ID, &r.UUID, &r.DeviceID,
 		&r.TempC, &r.HumidityPct, &r.AirQualityPPM, &r.AirQualityV,
 		&r.AccelX, &r.AccelY, &r.AccelZ, &r.GyroX, &r.GyroY, &r.GyroZ, &r.IMUTempC,
-		&r.DistanceCm, &r.Lat, &r.Lon, &r.AltM, &r.SpeedKmph, &r.Satellites,
+		&r.DistanceCm, &r.ColorDominant, &r.Lat, &r.Lon, &r.AltM, &r.SpeedKmph, &r.Satellites,
 		&r.RSSI, &r.UptimeS, &r.RawJSON, &r.CreatedAt,
 	)
 	if err != nil {
@@ -111,7 +111,7 @@ func GetTelemetryHistory(session *gocql.Session, deviceID string, hours int) ([]
 		SELECT id, uuid, device_id,
 		       temp_c, humidity_pct, air_quality_ppm, air_quality_v,
 		       accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, imu_temp_c,
-		       distance_cm, lat, lon, alt_m, speed_kmph, satellites,
+		       distance_cm, color_dominant, lat, lon, alt_m, speed_kmph, satellites,
 		       rssi, uptime_s, raw_json, created_at
 		FROM robot_telemetry
 		WHERE partition_key = 0 AND device_id = ? AND created_at >= ?
@@ -126,7 +126,7 @@ func GetTelemetryHistory(session *gocql.Session, deviceID string, hours int) ([]
 		&r.ID, &r.UUID, &r.DeviceID,
 		&r.TempC, &r.HumidityPct, &r.AirQualityPPM, &r.AirQualityV,
 		&r.AccelX, &r.AccelY, &r.AccelZ, &r.GyroX, &r.GyroY, &r.GyroZ, &r.IMUTempC,
-		&r.DistanceCm, &r.Lat, &r.Lon, &r.AltM, &r.SpeedKmph, &r.Satellites,
+		&r.DistanceCm, &r.ColorDominant, &r.Lat, &r.Lon, &r.AltM, &r.SpeedKmph, &r.Satellites,
 		&r.RSSI, &r.UptimeS, &r.RawJSON, &r.CreatedAt,
 	) {
 		results = append(results, r)
@@ -143,7 +143,7 @@ func GetTelemetryRange(session *gocql.Session, deviceID string, start, end time.
 		SELECT id, uuid, device_id,
 		       temp_c, humidity_pct, air_quality_ppm, air_quality_v,
 		       accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, imu_temp_c,
-		       distance_cm, lat, lon, alt_m, speed_kmph, satellites,
+		       distance_cm, color_dominant, lat, lon, alt_m, speed_kmph, satellites,
 		       rssi, uptime_s, raw_json, created_at
 		FROM robot_telemetry
 		WHERE partition_key = 0 AND device_id = ? AND created_at >= ? AND created_at <= ?
@@ -158,7 +158,7 @@ func GetTelemetryRange(session *gocql.Session, deviceID string, start, end time.
 		&r.ID, &r.UUID, &r.DeviceID,
 		&r.TempC, &r.HumidityPct, &r.AirQualityPPM, &r.AirQualityV,
 		&r.AccelX, &r.AccelY, &r.AccelZ, &r.GyroX, &r.GyroY, &r.GyroZ, &r.IMUTempC,
-		&r.DistanceCm, &r.Lat, &r.Lon, &r.AltM, &r.SpeedKmph, &r.Satellites,
+		&r.DistanceCm, &r.ColorDominant, &r.Lat, &r.Lon, &r.AltM, &r.SpeedKmph, &r.Satellites,
 		&r.RSSI, &r.UptimeS, &r.RawJSON, &r.CreatedAt,
 	) {
 		results = append(results, r)
@@ -178,7 +178,7 @@ func GetLatestTelemetryN(session *gocql.Session, deviceID string, limit int) ([]
 		SELECT id, uuid, device_id,
 		       temp_c, humidity_pct, air_quality_ppm, air_quality_v,
 		       accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, imu_temp_c,
-		       distance_cm, lat, lon, alt_m, speed_kmph, satellites,
+		       distance_cm, color_dominant, lat, lon, alt_m, speed_kmph, satellites,
 		       rssi, uptime_s, raw_json, created_at
 		FROM robot_telemetry
 		WHERE partition_key = 0 AND device_id = ?
@@ -194,7 +194,7 @@ func GetLatestTelemetryN(session *gocql.Session, deviceID string, limit int) ([]
 		&r.ID, &r.UUID, &r.DeviceID,
 		&r.TempC, &r.HumidityPct, &r.AirQualityPPM, &r.AirQualityV,
 		&r.AccelX, &r.AccelY, &r.AccelZ, &r.GyroX, &r.GyroY, &r.GyroZ, &r.IMUTempC,
-		&r.DistanceCm, &r.Lat, &r.Lon, &r.AltM, &r.SpeedKmph, &r.Satellites,
+		&r.DistanceCm, &r.ColorDominant, &r.Lat, &r.Lon, &r.AltM, &r.SpeedKmph, &r.Satellites,
 		&r.RSSI, &r.UptimeS, &r.RawJSON, &r.CreatedAt,
 	) {
 		results = append(results, r)

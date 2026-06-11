@@ -22,6 +22,8 @@ type TelemetryRecord struct {
 
 	DistanceCm float64
 
+	ColorDominant string
+
 	Lat        float64
 	Lon        float64
 	AltM       float64

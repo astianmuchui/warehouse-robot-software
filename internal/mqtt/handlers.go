@@ -54,6 +54,11 @@ type readingsPayload struct {
 		DistanceCm float64 `json:"distance_cm"`
 		Valid      bool    `json:"valid"`
 	} `json:"proximity"`
+	Color struct {
+		Present  bool   `json:"present"`
+		Valid    bool   `json:"valid"`
+		Dominant string `json:"dominant"`
+	} `json:"color"`
 	Location struct {
 		Lat        float64 `json:"lat"`
 		Lon        float64 `json:"lon"`
@@ -157,6 +162,7 @@ func handleReadings(raw string) error {
 		GyroZ:         p.IMU.GyroZ,
 		IMUTempC:      p.IMU.TempC,
 		DistanceCm:    p.Proximity.DistanceCm,
+		ColorDominant: p.Color.Dominant,
 		Lat:           p.Location.Lat,
 		Lon:           p.Location.Lon,
 		AltM:          p.Location.AltitudeM,

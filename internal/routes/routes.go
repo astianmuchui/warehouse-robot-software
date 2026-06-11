@@ -56,5 +56,6 @@ func GetRoutes(app *fiber.App) {
 
 		v1.Post("/cmd/drive", pageapi.CmdDriveHandler)
 		v1.Post("/cmd/arm",   pageapi.CmdArmHandler)
+		v1.Post("/cmd/pose",  pageapi.CmdPoseHandler)
 	})
 }

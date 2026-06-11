@@ -644,15 +644,25 @@
   // Only emit when the resolved value actually changes — keeps the wire quiet
   // while letting genuine changes propagate instantly.
 
-  let lastDriveCmd = null;
-  async function sendDrive(cmd) {
-    if (cmd === lastDriveCmd) return;
-    lastDriveCmd = cmd;
+  // Hard ceiling on drive speed. The frontend owns the cap — it never emits a
+  // speed above this, so the robot can't be commanded faster than 70 % duty.
+  const DRIVE_SPEED_MAX = 70;
+
+  let lastDriveCmd = null;   // last "cmd@speed" string sent, for de-duplication
+  async function sendDrive(cmd, speed) {
+    // Resolve speed: clamp into 0–DRIVE_SPEED_MAX. Omitted → use the cap.
+    const spd = (speed == null)
+      ? DRIVE_SPEED_MAX
+      : Math.max(0, Math.min(DRIVE_SPEED_MAX, Math.round(speed)));
+
+    const sig = cmd + '@' + spd;
+    if (sig === lastDriveCmd) return;
+    lastDriveCmd = sig;
     try {
       await fetch('/api/v1/cmd/drive', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cmd }),
+        body: JSON.stringify({ cmd, speed: spd }),
       });
     } catch (e) {
       lastDriveCmd = null;
@@ -725,7 +735,9 @@
         state[key] = +el.value;
         const vEl = document.getElementById(id.replace('s_', 'v_'));
         if (vEl) vEl.textContent = el.value + '%';
-        sendDrive(deriveDriveCmd(state.motL, state.motR));
+        // Speed = larger of the two slider magnitudes (sendDrive caps it at 70).
+        const speed = Math.max(Math.abs(state.motL), Math.abs(state.motR));
+        sendDrive(deriveDriveCmd(state.motL, state.motR), speed);
       });
     });
 
