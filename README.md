@@ -180,6 +180,30 @@ go run ./cmd/main.go
 go build ./cmd/main.go
 ```
 
+## Frontend Assets
+
+JavaScript is served from `assets/js/`. The project's own source scripts are
+shipped minified (compressed and mangled with [terser](https://terser.org/)):
+
+- analysis.js
+- dashboard.js
+- main.js
+- replay.js
+- thresholds.js
+- visualization.js
+
+`tailwind.js` and `three.js` are third-party libraries and are left untouched.
+
+To re-minify the source scripts after editing them (requires Node.js):
+
+```bash
+for f in analysis dashboard main replay thresholds visualization; do
+  npx -y terser "assets/js/$f.js" --compress --mangle --output "assets/js/$f.js"
+done
+```
+
+Readable source is recoverable from version control history.
+
 ## Local Development Notes
 
 - Static assets are served from /assets
