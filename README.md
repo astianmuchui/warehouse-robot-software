@@ -1,5 +1,4 @@
 # Warehouse Robot Software
-
 Go-based web application for monitoring and managing warehouse robot telemetry and events.
 
 # Screenshots
@@ -9,7 +8,7 @@ Go-based web application for monitoring and managing warehouse robot telemetry a
 <img width="1920" height="1080" alt="Screenshot From 2026-07-14 11-02-40" src="https://github.com/user-attachments/assets/3c5fe047-6389-4ad4-b248-5d8250d76e33" />
 <img width="1920" height="1080" alt="Screenshot From 2026-07-14 11-02-28" src="https://github.com/user-attachments/assets/c8673189-1bd8-49b0-a367-03ceb27e1080" />
 
-Stack:
+Tech Stack:
 
 - Fiber HTTP server
 - Django Template web pages
