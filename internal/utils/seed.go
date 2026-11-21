@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"os"
 
 	"github.com/gofiber/fiber/v2/log"
@@ -30,7 +32,7 @@ func SeedTeamUsers() {
 	}
 	pw := os.Getenv("SGG_DEFAULT_PASSWORD")
 	if pw == "" {
-		pw = "sgg-robot-2026"
+		pw = randomPassword()
 	}
 	hashed := PasswordHash([]byte(pw))
 
@@ -56,4 +58,10 @@ func SeedTeamUsers() {
 		}
 		log.Infof("seed: created user %s (password: %s - change it via reset flow)", s.Username, pw)
 	}
+}
+
+func randomPassword() string {
+	b := make([]byte, 12)
+	_, _ = rand.Read(b)
+	return hex.EncodeToString(b)
 }
