@@ -47,11 +47,11 @@
                 </div>
                 <div>
                     <label class="form-label">Min value</label>
-                    <input type="number" step="any" name="min_value" placeholder="— (none)" class="form-input">
+                    <input type="number" step="any" name="min_value" placeholder="- (none)" class="form-input">
                 </div>
                 <div>
                     <label class="form-label">Max value</label>
-                    <input type="number" step="any" name="max_value" placeholder="— (none)" class="form-input">
+                    <input type="number" step="any" name="max_value" placeholder="- (none)" class="form-input">
                 </div>
                 <div class="col-span-2 md:col-span-1 flex items-end">
                     <button type="submit" class="w-full btn-primary">Add threshold</button>

@@ -1,10 +1,5 @@
 package env
 
-/*
-	Will Determine whether the user is in a local or prod env
-	Will also set defaults
-*/
-
 import (
     "fmt"
     "os"
@@ -46,10 +41,6 @@ func GetHttpListenPort() (int, error) {
     }
     return Port, nil
 }
-
-/**
-Returns whether the app is running in local or production environments
-*/
 
 func GetWorkingEnvironment() string {
     env := os.Getenv("SGG_ENVIRONMENT")
@@ -93,8 +84,6 @@ func GetAppPassword() (string, error) {
     return app_password, nil
 }
 
-// MQTT
-
 func GetMQTTBroker() string {
     v := os.Getenv("SGG_MQTT_BROKER")
     if v == "" {
@@ -122,8 +111,6 @@ func GetMQTTClientID() string {
 
 func GetMQTTUsername() string { return os.Getenv("SGG_MQTT_USERNAME") }
 func GetMQTTPassword() string { return os.Getenv("SGG_MQTT_PASSWORD") }
-
-// ScyllaDB
 
 func GetCassandraHost() string {
     v := os.Getenv("SGG_CASSANDRA_HOST")

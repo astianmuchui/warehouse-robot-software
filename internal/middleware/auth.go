@@ -8,8 +8,6 @@ import (
 	"github.com/astianmuchui/mobilerobot/internal/services/sessions"
 )
 
-// RequireSession redirects browsers to /login (preserving the originally
-// requested path) and returns 401 JSON to API/XHR callers.
 func RequireSession(c *fiber.Ctx) error {
 	id := c.Cookies(sessions.CookieName)
 	if id != "" {
@@ -31,8 +29,6 @@ func RequireSession(c *fiber.Ctx) error {
 	return c.Redirect("/login?next="+next, fiber.StatusFound)
 }
 
-// CurrentUser is a non-blocking middleware that exposes session info to
-// templates when present, without forcing redirect when absent.
 func CurrentUser(c *fiber.Ctx) error {
 	id := c.Cookies(sessions.CookieName)
 	if id != "" {

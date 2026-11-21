@@ -11,8 +11,6 @@ import (
 	"github.com/astianmuchui/mobilerobot/internal/scylla"
 )
 
-
-
 type bootPayload struct {
 	DeviceID  string `json:"device_id"`
 	Event     string `json:"event"`
@@ -82,8 +80,6 @@ type imuEventPayload struct {
 	AccelY    float64 `json:"accel_y"`
 	AccelZ    float64 `json:"accel_z"`
 }
-
-
 
 func handleBoot(raw string) error {
 	var p bootPayload
@@ -173,7 +169,6 @@ func handleReadings(raw string) error {
 		RawJSON:       raw,
 	}
 
-	// Clamp physically non-negative measurements; negative readings are invalid.
 	if rec.AirQualityPPM < 0 {
 		rec.AirQualityPPM = 0
 	}
@@ -224,8 +219,6 @@ func handleIMUEvent(eventType, raw string) error {
 	}
 	return nil
 }
-
-
 
 func checkThresholds(deviceID string, rec scylla.TelemetryRecord) {
 	var thresholds []models.Threshold

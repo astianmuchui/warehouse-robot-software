@@ -93,7 +93,6 @@ func UserApiLoginHandler(c *fiber.Ctx) error {
         })
     }
 
-    // Verify user account if not already verified
     if user.EmailVerifiedAt.String() == "0001-01-01 00:00:00 +0000 UTC" || user.EmailVerifiedAt.String() == "" {
         url := utils.GetURL(c)
         var email mail.Email

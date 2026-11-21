@@ -55,39 +55,37 @@
 
             <div class="px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-                <!-- Stats row (7 cards) -->
                 <div class="grid grid-cols-2 md:grid-cols-7 gap-4" id="stats-row">
                     <div class="stat-card">
                         <p class="stat-label">Avg Temp</p>
-                        <p class="stat-val" id="stat-temp-avg">—</p>
+                        <p class="stat-val" id="stat-temp-avg">-</p>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">Max Temp</p>
-                        <p class="stat-val text-orange-400" id="stat-temp-max">—</p>
+                        <p class="stat-val text-orange-400" id="stat-temp-max">-</p>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">Avg Humidity</p>
-                        <p class="stat-val" id="stat-hum-avg">—</p>
+                        <p class="stat-val" id="stat-hum-avg">-</p>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">Avg Air Quality</p>
-                        <p class="stat-val" id="stat-aq-avg">—</p>
+                        <p class="stat-val" id="stat-aq-avg">-</p>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">Peak PPM</p>
-                        <p class="stat-val text-amber-400" id="stat-aq-peak">—</p>
+                        <p class="stat-val text-amber-400" id="stat-aq-peak">-</p>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">AQ Status</p>
-                        <p class="stat-val text-sm" id="stat-aq-class">—</p>
+                        <p class="stat-val text-sm" id="stat-aq-class">-</p>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">Total Readings</p>
-                        <p class="stat-val text-sky-400" id="stat-total-readings">—</p>
+                        <p class="stat-val text-sky-400" id="stat-total-readings">-</p>
                     </div>
                 </div>
 
-                <!-- Temp / Humidity -->
                 <div class="panel">
                     <h2 class="panel-title">Temperature &amp; Humidity over time</h2>
                     <div class="relative h-[480px]">
@@ -97,18 +95,13 @@
                     <p class="hc-zoom-tip">Drag to zoom · Shift-drag to pan · Double-click to reset · ⋮ to export / fullscreen</p>
                 </div>
 
-                <!-- MQ-135 Air Quality Analysis (deep-dive) -->
                 <div class="panel space-y-5">
                     <h2 class="panel-title">MQ-135 Air Quality Analysis</h2>
 
-                    <!-- Gauge + current status -->
                     <div class="flex items-start gap-6">
-                        <!-- Gauge -->
                         <div class="flex-1 space-y-2">
                             <div class="relative">
-                                <!-- Colored band bar -->
                                 <div class="flex h-5 rounded-full overflow-hidden border border-white/10">
-                                    <!-- widths proportional to range within 0-1200 scale -->
                                     <div title="Excellent (0-100)"  style="width:8.33%;background:#22c55e"></div>
                                     <div title="Good (101-200)"     style="width:8.33%;background:#84cc16"></div>
                                     <div title="Moderate (201-400)" style="width:16.67%;background:#eab308"></div>
@@ -116,40 +109,34 @@
                                     <div title="Very Poor (601-1000)" style="width:33.33%;background:#ef4444"></div>
                                     <div title="Hazardous (1000+)"  style="width:16.67%;background:#dc2626"></div>
                                 </div>
-                                <!-- Marker -->
                                 <div id="aq-gauge-marker" class="absolute top-0 w-0.5 h-5 bg-white shadow-lg rounded pointer-events-none" style="left:0%;transform:translateX(-50%)"></div>
                             </div>
-                            <!-- Scale labels -->
                             <div class="flex justify-between text-[10px] text-slate-600 font-mono px-0.5">
                                 <span>0</span><span>100</span><span>200</span><span>400</span><span>600</span><span>1000</span><span>1200+</span>
                             </div>
                         </div>
-                        <!-- Current status box -->
                         <div class="shrink-0 text-right">
-                            <p id="aq-gauge-val" class="text-2xl font-bold text-white">—</p>
-                            <p id="aq-gauge-label" class="text-sm font-semibold mt-0.5">—</p>
-                            <p id="aq-gauge-desc" class="text-xs text-slate-500 mt-1 max-w-[200px]">—</p>
+                            <p id="aq-gauge-val" class="text-2xl font-bold text-white">-</p>
+                            <p id="aq-gauge-label" class="text-sm font-semibold mt-0.5">-</p>
+                            <p id="aq-gauge-desc" class="text-xs text-slate-500 mt-1 max-w-[200px]">-</p>
                         </div>
                     </div>
 
-                    <!-- PPM over time chart -->
                     <div class="relative h-[560px]">
                         <div id="chart-aq" class="absolute inset-0"></div>
                         <div class="chart-loader" id="loader-aq"><div class="chart-spinner"></div></div>
                     </div>
                     <p class="hc-zoom-tip">Drag to zoom · Shift-drag to pan · Double-click to reset · ⋮ to export / fullscreen</p>
 
-                    <!-- Zone time distribution -->
                     <div>
                         <p class="text-xs font-semibold text-slate-500 mb-3 uppercase tracking-wider">Time in Zone</p>
                         <div id="aq-zones" class="space-y-2"></div>
                     </div>
                 </div>
 
-                <!-- MQ-135 Gas Reference -->
                 <div class="panel">
                     <h2 class="panel-title">MQ-135 Gas Detection Reference</h2>
-                    <p class="text-xs text-slate-500 mb-4">The MQ-135 outputs a single combined PPM value calibrated to NH₃ (ammonia). It cannot distinguish individual gases — the reading reflects the aggregate response to all pollutants present. Values below show the approximate sensor output when each gas reaches its safety threshold.</p>
+                    <p class="text-xs text-slate-500 mb-4">The MQ-135 outputs a single combined PPM value calibrated to NH₃ (ammonia). It cannot distinguish individual gases - the reading reflects the aggregate response to all pollutants present. Values below show the approximate sensor output when each gas reaches its safety threshold.</p>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs">
                             <thead>
@@ -205,7 +192,7 @@
                                 </tr>
                                 <tr>
                                     <td class="py-2 pr-4 font-medium text-slate-300">Smoke</td>
-                                    <td class="py-2 pr-4 font-mono text-slate-300">—</td>
+                                    <td class="py-2 pr-4 font-mono text-slate-300">-</td>
                                     <td class="py-2 pr-4 text-slate-400">200 – 10,000 ppm</td>
                                     <td class="py-2 pr-4 text-slate-400 font-medium">Visible &gt; 400 ppm</td>
                                     <td class="py-2 pr-4 text-slate-500">Visual threshold</td>
@@ -225,7 +212,6 @@
                     <p class="text-[10px] text-slate-600 mt-3">* "Sensor ≈ at limit" values are approximated from MQ-135 Rs/Ro sensitivity curves. Calibrate sensor in known-clean air (Ro baseline) for accurate readings. 24h warm-up recommended for stable output.</p>
                 </div>
 
-                <!-- Accelerometer -->
                 <div class="panel">
                     <h2 class="panel-title">Accelerometer (m/s²) over time</h2>
                     <div class="relative h-[480px]">
@@ -235,7 +221,6 @@
                     <p class="hc-zoom-tip">Drag to zoom · Shift-drag to pan · Double-click to reset · ⋮ to export / fullscreen</p>
                 </div>
 
-                <!-- Gyroscope -->
                 <div class="panel">
                     <h2 class="panel-title">Gyroscope (rad/s) over time</h2>
                     <div class="relative h-[480px]">
@@ -245,7 +230,6 @@
                     <p class="hc-zoom-tip">Drag to zoom · Shift-drag to pan · Double-click to reset · ⋮ to export / fullscreen</p>
                 </div>
 
-                <!-- Proximity -->
                 <div class="panel">
                     <h2 class="panel-title">Proximity Distance (cm) over time</h2>
                     <div class="relative h-[480px]">

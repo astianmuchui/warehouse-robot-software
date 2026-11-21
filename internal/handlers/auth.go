@@ -13,7 +13,6 @@ import (
 )
 
 func LoginPageHandler(c *fiber.Ctx) error {
-	// Already signed in? Skip the form.
 	if id := c.Cookies(sessions.CookieName); id != "" {
 		if _, ok := sessions.Get(id); ok {
 			return c.Redirect(safeNext(c.Query("next", "/dashboard")), fiber.StatusFound)
@@ -106,8 +105,6 @@ func LogoutHandler(c *fiber.Ctx) error {
 	return c.Redirect("/", fiber.StatusFound)
 }
 
-// safeNext only allows local paths (no scheme, no host) to prevent open
-// redirects through the ?next=… query.
 func safeNext(s string) string {
 	if s == "" {
 		return ""

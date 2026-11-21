@@ -49,8 +49,6 @@ func Connect() (*gocql.Session, error) {
 		time.Sleep(time.Duration(attempt) * 2 * time.Second)
 	}
 
-	// Give up the synchronous attempt, but keep trying in the background so
-	// the API recovers automatically once Scylla becomes reachable.
 	go reconnectLoop()
 	return nil, fmt.Errorf("scylladb connect: %w", lastErr)
 }

@@ -24,9 +24,6 @@ var seedUsers = []seedSpec{
 	{"Glen",      "Okoth",  "glenochieng",  "glen@sgg.local",      "+254000000003"},
 }
 
-// SeedTeamUsers ensures the three SGG accounts exist. Default password is read
-// from SGG_DEFAULT_PASSWORD (or falls back to a baked default). When a user is
-// newly created, the password is logged so the team can sign in.
 func SeedTeamUsers() {
 	if db.DB == nil {
 		return
@@ -57,6 +54,6 @@ func SeedTeamUsers() {
 			log.Warnf("seed: could not create %s: %v", s.Username, err)
 			continue
 		}
-		log.Infof("seed: created user %s (password: %s — change it via reset flow)", s.Username, pw)
+		log.Infof("seed: created user %s (password: %s - change it via reset flow)", s.Username, pw)
 	}
 }

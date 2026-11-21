@@ -90,12 +90,12 @@
                         <h2 class="panel-title">3D Orientation</h2>
                         <canvas id="replay-canvas" class="h-[300px] w-full rounded-xl bg-slate-950/60"></canvas>
                         <div class="mt-3 grid grid-cols-3 gap-2 text-center text-xs text-slate-400">
-                            <div>Accel X<br><span class="font-mono text-sky-300" id="r-ax">—</span></div>
-                            <div>Accel Y<br><span class="font-mono text-sky-300" id="r-ay">—</span></div>
-                            <div>Accel Z<br><span class="font-mono text-sky-300" id="r-az">—</span></div>
-                            <div>Gyro X<br><span class="font-mono text-emerald-300" id="r-gx">—</span></div>
-                            <div>Gyro Y<br><span class="font-mono text-emerald-300" id="r-gy">—</span></div>
-                            <div>Gyro Z<br><span class="font-mono text-emerald-300" id="r-gz">—</span></div>
+                            <div>Accel X<br><span class="font-mono text-sky-300" id="r-ax">-</span></div>
+                            <div>Accel Y<br><span class="font-mono text-sky-300" id="r-ay">-</span></div>
+                            <div>Accel Z<br><span class="font-mono text-sky-300" id="r-az">-</span></div>
+                            <div>Gyro X<br><span class="font-mono text-emerald-300" id="r-gx">-</span></div>
+                            <div>Gyro Y<br><span class="font-mono text-emerald-300" id="r-gy">-</span></div>
+                            <div>Gyro Z<br><span class="font-mono text-emerald-300" id="r-gz">-</span></div>
                         </div>
                     </div>
 
@@ -115,7 +115,7 @@
 
 
                         <p class="text-xs text-slate-500">Recorded at: <span class="font-mono text-slate-300"
-                                id="frame-time">—</span></p>
+                                id="frame-time">-</span></p>
 
 
                         <div class="flex items-center gap-3 flex-wrap">

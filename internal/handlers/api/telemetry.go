@@ -9,8 +9,6 @@ import (
 	"github.com/astianmuchui/mobilerobot/internal/scylla"
 )
 
-// parseRangeTime accepts ISO8601 (e.g. "2026-05-21T08:00:00Z") or a date-only
-// string ("2026-05-21"). Returns zero time when input is empty/invalid.
 func parseRangeTime(s string, endOfDay bool) time.Time {
 	if s == "" {
 		return time.Time{}
@@ -30,7 +28,6 @@ func parseRangeTime(s string, endOfDay bool) time.Time {
 	return time.Time{}
 }
 
-
 func TelemetryLatestHandler(c *fiber.Ctx) error {
 	deviceID := c.Query("device_id", "WRBT202642")
 
@@ -47,7 +44,6 @@ func TelemetryLatestHandler(c *fiber.Ctx) error {
 
 	return c.JSON(rec)
 }
-
 
 func TelemetryHistoryHandler(c *fiber.Ctx) error {
 	deviceID := c.Query("device_id", "WRBT202642")
@@ -128,8 +124,6 @@ func TelemetryHistoryHandler(c *fiber.Ctx) error {
 	})
 }
 
-
-
 func TelemetryIMUHandler(c *fiber.Ctx) error {
 	deviceID := c.Query("device_id", "WRBT202642")
 
@@ -155,7 +149,6 @@ func TelemetryIMUHandler(c *fiber.Ctx) error {
 	})
 }
 
-
 func EventsAPIHandler(c *fiber.Ctx) error {
 	deviceID := c.Query("device_id", "")
 	page := c.QueryInt("page", 1)
@@ -178,8 +171,6 @@ func EventsAPIHandler(c *fiber.Ctx) error {
 		"events": events,
 	})
 }
-
-
 
 func TelemetryIMUReplayHandler(c *fiber.Ctx) error {
 	deviceID := c.Query("device_id", "WRBT202642")
@@ -260,7 +251,6 @@ func TelemetryIMUReplayHandler(c *fiber.Ctx) error {
 		"frames":    frames,
 	})
 }
-
 
 func TelemetryCountHandler(c *fiber.Ctx) error {
 	deviceID := c.Query("device_id", "")

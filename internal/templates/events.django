@@ -52,7 +52,6 @@
             </table>
         </div>
 
-        <!-- Pagination -->
         {{if gt .TotalPages 1}}
         <div class="mt-4 flex justify-center gap-1">
             {{range .Pages}}

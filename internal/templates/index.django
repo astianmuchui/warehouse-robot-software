@@ -9,7 +9,7 @@
     <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif'],mono:['JetBrains Mono','ui-monospace','monospace']}}}}</script>
     <link rel="stylesheet" href="/assets/css/style.css">
 
-    <meta name="description" content="SGG Warehouse Robot — a semi-autonomous robot for warehouse operations and environmental monitoring. Final year project, Control & Instrumentation.">
+    <meta name="description" content="SGG Warehouse Robot - a semi-autonomous robot for warehouse operations and environmental monitoring. Final year project, Control & Instrumentation.">
     <meta name="keywords" content="warehouse robot, robotics, environmental monitoring, control and instrumentation, final year project">
     <meta name="author" content="Sebastian Muchui, Gloria Ngei, Glen Okoth">
     <meta property="og:title" content="SGG Warehouse Robot">
@@ -23,7 +23,6 @@
         html, body { background: #04070f; }
         body { font-family: 'Outfit', sans-serif; }
 
-        /* Animated aurora background */
         .aurora { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
         .aurora .blob {
             position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.55;
@@ -56,7 +55,6 @@
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.6'/></svg>");
         }
 
-        /* Glass panels */
         .glass {
             background: rgba(10, 16, 30, 0.55);
             border: 1px solid rgba(255,255,255,0.08);
@@ -65,7 +63,6 @@
             box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 30px 80px -20px rgba(0,0,0,0.6);
         }
 
-        /* Headline gradient */
         .title-grad {
             background: linear-gradient(120deg, #ffffff 0%, #bae6fd 35%, #67e8f9 60%, #a78bfa 100%);
             -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -73,7 +70,6 @@
         }
         @keyframes shift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
 
-        /* Buttons */
         .btn-primary {
             background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
             box-shadow: 0 10px 30px -10px rgba(14,165,233,0.6), 0 0 0 1px rgba(255,255,255,0.06) inset;
@@ -85,7 +81,6 @@
         }
         .btn-ghost:hover { background: rgba(255,255,255,0.08); }
 
-        /* Robot stage */
         #robot-stage {
             position: relative; width: 100%; aspect-ratio: 1 / 1;
             border-radius: 24px; overflow: hidden;
@@ -115,7 +110,6 @@
             pointer-events: none;
         }
 
-        /* Status pill */
         .pulse-dot {
             display:inline-block; width: 8px; height: 8px; border-radius: 50%;
             background: #4ade80; box-shadow: 0 0 12px #4ade80;
@@ -123,7 +117,6 @@
         }
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.55;transform:scale(0.85)} }
 
-        /* Team card */
         .member {
             position: relative; overflow: hidden;
             transition: transform 0.25s ease, border-color 0.25s ease;
@@ -147,7 +140,6 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Tag chips */
         .chip {
             display: inline-flex; align-items: center; gap: 6px;
             border: 1px solid rgba(255,255,255,0.08);
@@ -158,17 +150,14 @@
         }
         .chip-dot { width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
 
-        /* Nav */
         .nav-link { color: #cbd5e1; transition: color 0.15s; }
         .nav-link:hover { color: #f0f9ff; }
 
-        /* Section divider */
         .divider {
             height: 1px; width: 100%;
             background: linear-gradient(90deg, transparent, rgba(148,163,184,0.25), transparent);
         }
 
-        /* Reduce motion */
         @media (prefers-reduced-motion: reduce) {
             .aurora .blob, .title-grad, .scan-line, .pulse-dot { animation: none !important; }
         }
@@ -185,7 +174,6 @@
     <div class="grid-bg"></div>
     <div class="noise"></div>
 
-    <!-- Nav -->
     <header class="relative z-20">
         <nav class="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
             <a href="/" class="flex items-center gap-3">
@@ -212,12 +200,10 @@
         </nav>
     </header>
 
-    <!-- Hero -->
     <main class="relative z-10">
         <section class="max-w-7xl mx-auto px-6 lg:px-10 pt-10 lg:pt-16 pb-20">
             <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
-                <!-- Copy -->
                 <div>
                     <div class="flex items-center gap-2 mb-6">
                         <span class="chip"><span class="chip-dot"></span> FINAL YEAR PROJECT</span>
@@ -230,7 +216,7 @@
                     </h1>
 
                     <p class="mt-6 max-w-xl text-base md:text-lg text-slate-300/85 leading-relaxed">
-                        SGG is a research robot built for environmental monitoring and light warehouse handling — real-time telemetry,
+                        SGG is a research robot built for environmental monitoring and light warehouse handling - real-time telemetry,
                         threshold-aware events, and a tele-operable arm. Designed and built as our Bachelor's final year project in
                         <span class="text-sky-300 font-medium">Control &amp; Instrumentation</span>.
                     </p>
@@ -251,7 +237,6 @@
 
                 </div>
 
-                <!-- 3D Robot Stage -->
                 <div class="relative">
                     <div id="robot-stage">
                         <span class="corner tl"></span>
@@ -275,7 +260,6 @@
 
         <div class="divider"></div>
 
-        <!-- About / what SGG is -->
         <section id="about" class="max-w-7xl mx-auto px-6 lg:px-10 py-20">
             <div class="grid lg:grid-cols-3 gap-10">
                 <div class="lg:col-span-1">
@@ -284,11 +268,11 @@
                         <span class="title-grad">What does SGG mean?</span>
                     </h2>
                     <p class="mt-5 text-slate-300/80 leading-relaxed">
-                        SGG is the initials of the three of us behind this project —
+                        SGG is the initials of the three of us behind this project -
                         <span class="text-white font-medium">S</span>ebastian,
                         <span class="text-white font-medium">G</span>loria and
                         <span class="text-white font-medium">G</span>len.
-                        Built end-to-end for our final year in Control &amp; Instrumentation — from the robot itself to the
+                        Built end-to-end for our final year in Control &amp; Instrumentation - from the robot itself to the
                         live operations console you're reading this on.
                     </p>
                 </div>
@@ -313,7 +297,7 @@
                             <svg class="w-5 h-5 text-fuchsia-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div class="font-semibold mb-1">Threshold-aware events</div>
-                        <div class="text-sm text-slate-400 leading-relaxed">Set environmental and motion thresholds; the robot raises events when limits are crossed — logged and reviewable.</div>
+                        <div class="text-sm text-slate-400 leading-relaxed">Set environmental and motion thresholds; the robot raises events when limits are crossed - logged and reviewable.</div>
                     </div>
                     <div class="glass rounded-2xl p-6">
                         <div class="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-400/30 grid place-items-center mb-4">
@@ -328,7 +312,6 @@
 
         <div class="divider"></div>
 
-        <!-- Team -->
         <section id="team" class="max-w-7xl mx-auto px-6 lg:px-10 py-20">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
                 <div>
@@ -343,7 +326,6 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-6">
-                <!-- Sebastian -->
                 <article class="member glass rounded-2xl p-6">
                     <div class="flex items-center gap-4">
                         <div class="initial">SM</div>
@@ -357,7 +339,6 @@
                     </a>
                 </article>
 
-                <!-- Gloria -->
                 <article class="member glass rounded-2xl p-6">
                     <div class="flex items-center gap-4">
                         <div class="initial">GN</div>
@@ -371,7 +352,6 @@
                     </a>
                 </article>
 
-                <!-- Glen -->
                 <article class="member glass rounded-2xl p-6">
                     <div class="flex items-center gap-4">
                         <div class="initial">GO</div>
@@ -387,7 +367,6 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="relative z-10 border-t border-white/5 mt-10">
             <div class="max-w-7xl mx-auto px-6 lg:px-10 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div class="flex items-center gap-3">
@@ -395,7 +374,7 @@
                         <span class="font-mono font-bold text-slate-950 text-xs">SGG</span>
                     </div>
                     <div class="text-sm text-slate-400">
-                        © 2026 Muchui · Ngei · Okoth — Final year, Control &amp; Instrumentation.
+                        © 2026 Muchui · Ngei · Okoth - Final year, Control &amp; Instrumentation.
                     </div>
                 </div>
                 <div class="flex items-center gap-5 text-sm text-slate-400">
@@ -408,7 +387,6 @@
         </footer>
     </main>
 
-    <!-- Three.js -->
     <script src="/assets/js/three.js"></script>
     <script>
     (function () {
@@ -430,7 +408,6 @@
         renderer.shadowMap.enabled = true;
         wrap.appendChild(renderer.domElement);
 
-        // Lights
         const hemi = new THREE.HemisphereLight(0x9ec5ff, 0x0a0f1c, 0.55);
         scene.add(hemi);
         const key = new THREE.DirectionalLight(0x9ddcff, 1.2);
@@ -444,7 +421,6 @@
         fill.position.set(0, 3, 4);
         scene.add(fill);
 
-        // Ground disc
         const ground = new THREE.Mesh(
             new THREE.CircleGeometry(7, 64),
             new THREE.MeshStandardMaterial({ color: 0x0a1020, roughness: 0.9, metalness: 0.05 })
@@ -454,12 +430,10 @@
         ground.receiveShadow = true;
         scene.add(ground);
 
-        // Grid lines
         const grid = new THREE.GridHelper(14, 28, 0x1e3a5f, 0x132238);
         grid.position.y = 0;
         scene.add(grid);
 
-        // Materials
         const matBody = new THREE.MeshStandardMaterial({ color: 0x1c2a44, roughness: 0.45, metalness: 0.55 });
         const matAccent = new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0a3a5f, emissiveIntensity: 0.6, roughness: 0.3, metalness: 0.6 });
         const matDark = new THREE.MeshStandardMaterial({ color: 0x0b1422, roughness: 0.6, metalness: 0.3 });
@@ -471,24 +445,20 @@
         const robot = new THREE.Group();
         scene.add(robot);
 
-        // Chassis (lower deck)
         const chassis = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.5, 2.2), matBody);
         chassis.position.y = 0.65;
         chassis.castShadow = true;
         robot.add(chassis);
 
-        // Bevel band (accent strip)
         const band = new THREE.Mesh(new THREE.BoxGeometry(3.42, 0.08, 2.22), matAccent);
         band.position.y = 0.85;
         robot.add(band);
 
-        // Upper deck
         const upper = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.4, 1.8), matDark);
         upper.position.y = 1.15;
         upper.castShadow = true;
         robot.add(upper);
 
-        // Wheels (4) — diff drive style with castors implied
         function wheel(x, z) {
             const g = new THREE.Group();
             const tire = new THREE.Mesh(
@@ -512,7 +482,6 @@
         const w4 = wheel(-1.2, -1.05); robot.add(w4);
         const wheels = [w1, w2, w3, w4];
 
-        // Single HC-SR04 ultrasonic sensor (front-center) — two "eyes" on one PCB
         const usMount = new THREE.Group();
         usMount.position.set(0, 1.0, 1.12);
         const usPcb = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.45, 0.12), new THREE.MeshStandardMaterial({ color: 0x0a3a25, roughness: 0.5 }));
@@ -523,7 +492,6 @@
         const eR = new THREE.Mesh(eyeGeom, eyeMat); eR.rotation.x = Math.PI / 2; eR.position.set( 0.28, 0, 0.08); usMount.add(eR);
         robot.add(usMount);
 
-        // Sensor mast (camera/IMU tower)
         const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.0, 12), matMetal);
         mast.position.set(-0.9, 1.85, 0); mast.castShadow = true;
         robot.add(mast);
@@ -534,13 +502,11 @@
         lens.rotation.x = Math.PI / 2; lens.position.set(-0.9, 2.4, 0.3);
         robot.add(lens);
 
-        // LEDs
         const led1 = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 12), matLED);
         led1.position.set(1.5, 0.95, 1.1); robot.add(led1);
         const led2 = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 12), matLED);
         led2.position.set(-1.5, 0.95, 1.1); robot.add(led2);
 
-        // Articulated arm (3 links + gripper)
         const armBase = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.32, 0.25, 24), matAccent);
         armBase.position.set(0.7, 1.42, 0); robot.add(armBase);
 
@@ -561,7 +527,6 @@
         const grip2 = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.28, 0.14), matDark);
         grip2.position.set(-0.12, 0.14, 0); wrist.add(grip2);
 
-        // Ultrasonic cone visualisation (subtle)
         const coneGeom = new THREE.ConeGeometry(0.9, 2.4, 28, 1, true);
         const coneMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.07, side: THREE.DoubleSide });
         const cone = new THREE.Mesh(coneGeom, coneMat);
@@ -569,7 +534,6 @@
         cone.position.set(0, 1.0, 2.35);
         robot.add(cone);
 
-        // Orbit interaction (lightweight, no OrbitControls dep)
         let isDragging = false, lastX = 0, lastY = 0;
         let targetRotY = 0.6, targetRotX = 0.0;
         let curRotY = 0.6, curRotX = 0.0;
@@ -586,7 +550,6 @@
             lastX = e.clientX; lastY = e.clientY;
         });
 
-        // Resize
         function resize() {
             const rect = wrap.getBoundingClientRect();
             const w = Math.max(1, rect.width);
@@ -597,7 +560,6 @@
         }
         const ro = new ResizeObserver(resize); ro.observe(wrap); resize();
 
-        // Animate
         const frameEl = document.getElementById('hud-frame');
         let frame = 0;
         const clock = new THREE.Clock();
@@ -605,26 +567,21 @@
             const dt = clock.getDelta();
             const t  = clock.getElapsedTime();
 
-            // Auto-rotate when idle, plus user-driven
             if (!isDragging) targetRotY += dt * 0.18;
             curRotY += (targetRotY - curRotY) * 0.08;
             curRotX += (targetRotX - curRotX) * 0.08;
             robot.rotation.y = curRotY;
             robot.rotation.x = curRotX;
 
-            // Spin wheels
             wheels.forEach(w => { w.children[0].rotation.x += dt * 2.2; w.children[1].rotation.x += dt * 2.2; });
 
-            // Arm gentle motion
             arm.rotation.x   = Math.sin(t * 0.6) * 0.25;
             joint.rotation.x = Math.sin(t * 0.6 + 1.2) * 0.45 - 0.2;
             wrist.rotation.y = Math.sin(t * 0.8) * 0.4;
 
-            // LED breathing
             const e = 1.6 + Math.sin(t * 3.0) * 0.6;
             matLED.emissiveIntensity = e;
 
-            // Ultrasonic cone pulse
             cone.material.opacity = 0.05 + (Math.sin(t * 2.0) * 0.5 + 0.5) * 0.06;
 
             renderer.render(scene, camera);

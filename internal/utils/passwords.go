@@ -1,5 +1,3 @@
-//@formatter:on
-
 package utils
 
 import (

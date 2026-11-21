@@ -30,7 +30,7 @@ func main() {
 
 
 	if _, err := scylla.Connect(); err != nil {
-		log.Warnf("ScyllaDB unavailable: %v — telemetry storage disabled", err)
+		log.Warnf("ScyllaDB unavailable: %v - telemetry storage disabled", err)
 	}
 
 
@@ -64,7 +64,7 @@ func main() {
 
 	listenPort, err := env.GetHttpListenPort()
 	if err != nil {
-		log.Errorf("Could not read HTTP port: %v — using default %d", err, env.DEFAULT_PORT)
+		log.Errorf("Could not read HTTP port: %v - using default %d", err, env.DEFAULT_PORT)
 		listenPort = env.DEFAULT_PORT
 	}
 

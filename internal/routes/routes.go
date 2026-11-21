@@ -10,14 +10,12 @@ import (
 
 func GetRoutes(app *fiber.App) {
 
-	// Public
 	app.Get("/", handlers.HomeHandler)
 	app.Get("/login", handlers.LoginPageHandler)
 	app.Post("/login", handlers.LoginPostHandler)
 	app.Post("/logout", handlers.LogoutHandler)
 	app.Get("/logout", handlers.LogoutHandler)
 
-	// Gated console pages
 	console := app.Group("", middleware.RequireSession)
 	console.Get("/dashboard", handlers.DashboardHandler)
 	console.Get("/analysis", handlers.AnalysisHandler)
